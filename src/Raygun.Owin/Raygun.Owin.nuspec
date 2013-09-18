@@ -8,7 +8,6 @@
     <owners>$author$</owners>
     <licenseUrl>https://github.com/xt0rted/Raygun.Owin/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/xt0rted/Raygun.Owin</projectUrl>
-    <iconUrl>https://app.raygun.io/Content/Images/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <tags>OWIN Raygun</tags>
