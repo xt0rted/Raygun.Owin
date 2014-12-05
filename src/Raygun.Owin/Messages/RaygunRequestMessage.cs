@@ -15,7 +15,7 @@ namespace Raygun.Messages
             var request = new OwinRequest(environment);
 
             Url = request.Uri.ToString();
-            HostName = request.Host;
+            HostName = request.Host.Value;
             HttpMethod = request.Method;
             IPAddress = request.RemoteIpAddress;
             QueryString = request.Query.ToDictionary(_ => _.Key, _ => string.Join(", ", _.Value));

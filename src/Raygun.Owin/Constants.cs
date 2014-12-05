@@ -23,6 +23,14 @@ namespace Raygun
             internal const string ApiKey = "X-ApiKey";
         }
 
+        internal static class RaygunKeys
+        {
+            /// <summary>
+            /// webapi.exception
+            /// </summary>
+            internal const string WebApiExceptionKey = "webapi.exception";
+        }
+
         internal const string RaygunApiEndpoint = "https://api.raygun.io/entries";
 
         internal static readonly Task CompletedTask = CreateCompletedTask();

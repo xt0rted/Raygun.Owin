@@ -66,7 +66,7 @@ namespace Raygun.Owin
                                    return Constants.CompletedTask;
                                }
 
-                               var exception = environment.Get<Exception>(OwinConstants.RaygunKeys.WebApiExceptionKey);
+                               var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
                                if (exception != null)
                                {
                                    return HandleExceptionWrapper(environment, exception);

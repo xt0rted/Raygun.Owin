@@ -43,10 +43,9 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="App_Packages\LibOwin.1.0\LibOwin.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="OwinConstants.cs" />
-    <Compile Include="Owin\OwinRequest.cs" />
     <Compile Include="Owin\RaygunUnhandledExceptionMiddleware.cs" />
     <Compile Include="Owin\RaygunUnhandledRequestExtensions.cs" />
     <Compile Include="Owin\RaygunUnhandledRequestMiddleware.cs" />
