@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{61671993-9DE5-462C-9380-E2326160CEF4}</ProjectGuid>
+    <ProjectGuid>{6C390224-B898-461A-9E94-81D099E85BA9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Raygun</RootNamespace>
-    <AssemblyName>Raygun.Owin</AssemblyName>
+    <RootNamespace>Raygun.Owin</RootNamespace>
+    <AssemblyName>Raygun.Owin.AppBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,8 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Owin">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
@@ -40,29 +42,18 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App_Packages\LibOwin.1.0\LibOwin.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Helpers.cs" />
-    <Compile Include="Owin\RaygunUnhandledExceptionMiddleware.cs" />
-    <Compile Include="Owin\RaygunUnhandledRequestMiddleware.cs" />
-    <Compile Include="UnhandledRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RaygunClient.cs" />
-    <Compile Include="Messages\RaygunClientMessage.cs" />
-    <Compile Include="Messages\RaygunEnvironmentMessage.cs" />
-    <Compile Include="Messages\RaygunErrorMessage.cs" />
-    <Compile Include="Messages\RaygunErrorStackTraceLineMessage.cs" />
-    <Compile Include="Messages\RaygunMessage.cs" />
-    <Compile Include="RaygunMessageBuilder.cs" />
-    <Compile Include="Messages\RaygunMessageDetails.cs" />
-    <Compile Include="Messages\RaygunRequestMessage.cs" />
-    <Compile Include="RaygunSettings.cs" />
-    <Compile Include="SimpleJson.cs" />
+    <Compile Include="RaygunUnhandledExceptionExtensions.cs" />
+    <Compile Include="RaygunUnhandledRequestExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Raygun.Owin.nuspec" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Raygun.Owin\Raygun.Owin.csproj">
+      <Project>{61671993-9de5-462c-9380-e2326160cef4}</Project>
+      <Name>Raygun.Owin</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
