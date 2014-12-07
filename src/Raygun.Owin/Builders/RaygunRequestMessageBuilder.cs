@@ -71,9 +71,13 @@
 
             #region OWIN Key Guidelines and Common Keys - 6. Common Keys
 
-            foreach (var pair in request.Get<IDictionary<string, object>>(OwinConstants.CommonKeys.Capabilities))
+            var capabilities = request.Get<IDictionary<string, object>>(OwinConstants.CommonKeys.Capabilities);
+            if (capabilities != null)
             {
-                yield return pair;
+                foreach (var capability in capabilities)
+                {
+                    yield return capability;
+                }
             }
 
             #endregion
