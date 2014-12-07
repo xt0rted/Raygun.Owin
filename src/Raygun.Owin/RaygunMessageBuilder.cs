@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
+    using Raygun.Builders;
     using Raygun.Messages;
 
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
@@ -36,7 +37,7 @@
 
         public IRaygunMessageBuilder SetEnvironmentDetails()
         {
-            _raygunMessage.Details.Environment = new RaygunEnvironmentMessage();
+            _raygunMessage.Details.Environment = RaygunEnvironmentMessageBuilder.Build();
 
             return this;
         }

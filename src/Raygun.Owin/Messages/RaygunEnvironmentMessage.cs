@@ -1,49 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
-namespace Raygun.Messages
+﻿namespace Raygun.Messages
 {
+    using System.Collections.Generic;
+
     public class RaygunEnvironmentMessage
     {
-        private List<double> _diskFreeSpace = new List<double>();
+        public int ProcessorCount { get; set; }
 
-        public RaygunEnvironmentMessage()
-        {
-            UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours;
-            Locale = CultureInfo.CurrentCulture.DisplayName;
-            ProcessorCount = Environment.ProcessorCount;
-            OSVersion = Environment.OSVersion.VersionString;
-            Architecture = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-            PackageVersion = Environment.Version.ToString();
+        public string OSVersion { get; set; }
 
-            GetDiskSpace();
-        }
+        public string PackageVersion { get; set; }
 
-        public string PackageVersion { get; private set; }
-        public int ProcessorCount { get; private set; }
-        public string OSVersion { get; private set; }
-        public string Architecture { get; private set; }
+        public string Architecture { get; set; }
 
-        public List<double> DiskSpaceFree
-        {
-            get { return _diskFreeSpace; }
-            set { _diskFreeSpace = value; }
-        }
+        //public ulong TotalVirtualMemory { get; set; }
+        //public ulong AvailableVirtualMemory { get; set; }
 
-        public double UtcOffset { get; private set; }
-        public string Locale { get; private set; }
+        public List<double> DiskSpaceFree { get; set; }
 
-        private void GetDiskSpace()
-        {
-            foreach (var drive in DriveInfo.GetDrives())
-            {
-                if (drive.IsReady)
-                {
-                    DiskSpaceFree.Add(drive.AvailableFreeSpace / 0x40000000); // in GB
-                }
-            }
-        }
+        //public ulong TotalPhysicalMemory { get; set; }
+        //public ulong AvailablePhysicalMemory { get; set; }
+
+        public double UtcOffset { get; set; }
+
+        public string Locale { get; set; }
     }
 }
