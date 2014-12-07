@@ -56,7 +56,7 @@
         {
             if (environment != null)
             {
-                _raygunMessage.Details.Request = new RaygunRequestMessage(environment);
+                _raygunMessage.Details.Request = RaygunRequestMessageBuilder.Build(environment);
             }
 
             return this;
