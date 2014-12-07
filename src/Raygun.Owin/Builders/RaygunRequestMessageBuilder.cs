@@ -1,7 +1,7 @@
 ﻿namespace Raygun.Builders
 {
+    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
 
     using Raygun.Messages;
@@ -37,14 +37,9 @@
 
             if (request.ContentType != "text/html" && request.ContentType != "application/x-www-form-urlencoded" && request.Method != "GET")
             {
-                int length = 4096;
-                string temp = new StreamReader(request.Body).ReadToEnd();
-                if (temp.Length < length)
-                {
-                    length = temp.Length;
-                }
+                var text = request.BodyAsString();
 
-                message.RawData = temp.Substring(0, length);
+                message.RawData = text.Substring(0, Math.Min(4096, text.Length));
             }
 
             message.Data = GetData(request).Where(_ => _.Value != null).ToDictionary(_ => _.Key, _ => _.Value);
