@@ -51,6 +51,7 @@
 
             try
             {
+                message.Cpu = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER");
                 message.Architecture = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
             }
             catch (Exception ex)
