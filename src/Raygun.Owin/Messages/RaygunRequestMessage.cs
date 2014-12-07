@@ -11,6 +11,7 @@
         public string HttpMethod { get; set; }
         public string IPAddress { get; set; }
         public IDictionary<string, string> QueryString { get; set; }
+        public IDictionary<string, string> Form { get; set; }
         public IDictionary<string, string> Headers { get; set; }
         public string RawData { get; set; }
     }

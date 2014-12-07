@@ -25,6 +25,9 @@
             // ToDo: filter querystring values
             message.QueryString = request.Query.ToDictionary(_ => _.Key, _ => string.Join(", ", _.Value));
 
+            // ToDo: filter form values (add 'password' by default?)
+            message.Form = request.ReadForm().ToDictionary(_ => _.Key, _ => string.Join(", ", _.Value));
+
             // ToDo: filter headers
             message.Headers = request.Headers.ToDictionary(_ => _.Key, _ => string.Join(", ", _.Value));
             message.Headers.Remove("Cookie");
