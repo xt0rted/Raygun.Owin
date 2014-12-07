@@ -11,8 +11,5 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <tags>OWIN Raygun</tags>
-    <dependencies>
-      <dependency id="Owin" version="1.0" />
-    </dependencies>
   </metadata>
 </package>
