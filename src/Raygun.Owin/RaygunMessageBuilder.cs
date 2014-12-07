@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-
-using Raygun.Messages;
-
-namespace Raygun
+﻿namespace Raygun
 {
-    using OwinEnvironment = IDictionary<string, object>;
+    using System;
+    using System.Collections;
+    using System.Reflection;
 
-    public class RaygunMessageBuilder
+    using Raygun.Messages;
+
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
+
+    public class RaygunMessageBuilder : IRaygunMessageBuilder
     {
         private readonly RaygunMessage _raygunMessage;
 
@@ -18,12 +17,9 @@ namespace Raygun
             _raygunMessage = new RaygunMessage();
         }
 
-        public static RaygunMessageBuilder New
+        public static IRaygunMessageBuilder New
         {
-            get
-            {
-                return new RaygunMessageBuilder();
-            }
+            get { return new RaygunMessageBuilder(); }
         }
 
         public RaygunMessage Build()
@@ -31,21 +27,21 @@ namespace Raygun
             return _raygunMessage;
         }
 
-        public RaygunMessageBuilder SetClientDetails()
+        public IRaygunMessageBuilder SetClientDetails()
         {
             _raygunMessage.Details.Client = new RaygunClientMessage();
 
             return this;
         }
 
-        public RaygunMessageBuilder SetEnvironmentDetails()
+        public IRaygunMessageBuilder SetEnvironmentDetails()
         {
             _raygunMessage.Details.Environment = new RaygunEnvironmentMessage();
 
             return this;
         }
 
-        public RaygunMessageBuilder SetExceptionDetails(Exception exception)
+        public IRaygunMessageBuilder SetExceptionDetails(Exception exception)
         {
             if (exception != null)
             {
@@ -55,7 +51,7 @@ namespace Raygun
             return this;
         }
 
-        public RaygunMessageBuilder SetHttpDetails(OwinEnvironment environment)
+        public IRaygunMessageBuilder SetHttpDetails(OwinEnvironment environment)
         {
             if (environment != null)
             {
@@ -65,28 +61,29 @@ namespace Raygun
             return this;
         }
 
-        public RaygunMessageBuilder SetMachineName(string machineName)
+        public IRaygunMessageBuilder SetMachineName(string machineName)
         {
             _raygunMessage.Details.MachineName = machineName;
 
             return this;
         }
 
-        public RaygunMessageBuilder SetUserCustomData(IDictionary userCustomData)
+        public IRaygunMessageBuilder SetUserCustomData(IDictionary userCustomData)
         {
             _raygunMessage.Details.UserCustomData = userCustomData;
 
             return this;
         }
 
-        public RaygunMessageBuilder SetVersion()
+        public IRaygunMessageBuilder SetVersion()
         {
             var entryAssembly = Assembly.GetEntryAssembly();
 
             if (entryAssembly != null)
             {
                 _raygunMessage.Details.Version = entryAssembly.GetName()
-                                                              .Version.ToString();
+                                                              .Version
+                                                              .ToString();
             }
             else
             {

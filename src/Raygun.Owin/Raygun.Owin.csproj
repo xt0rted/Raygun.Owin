@@ -43,6 +43,7 @@
     <Compile Include="App_Packages\LibOwin.1.0\LibOwin.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IRaygunMessageBuilder.cs" />
     <Compile Include="Owin\RaygunUnhandledExceptionMiddleware.cs" />
     <Compile Include="Owin\RaygunUnhandledRequestMiddleware.cs" />
     <Compile Include="UnhandledRequestException.cs" />
