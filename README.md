@@ -9,6 +9,12 @@ OWIN middleware for [Raygun.io](http://raygun.io/)
 Raygun.Owin is based around the official library from [Mindscape](https://github.com/MindscapeHQ/raygun4net) but does not reference `System.Web`. Because of this, and the lack of `HttpContext`, the more generic `IDictionary<string, object>` environment is used making it compatible with any OWIN implementation.
 
 
+## Install with NuGet
+
+- `Install-Package Raygun.Owin`
+- `Install-Package Raygun.Owin.AppBuilder` - IAppBuilder support
+
+
 ## Usage
 
 The primary use of this library is to log unhandled exceptions but it may also be used to log unhandled requests or as a starting point for your own logging framework.
