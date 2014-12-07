@@ -1,10 +1,11 @@
 ﻿namespace Raygun
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     using Raygun.Messages;
+
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
     public interface IRaygunMessageBuilder
     {
@@ -13,9 +14,9 @@
         IRaygunMessageBuilder SetClientDetails();
         IRaygunMessageBuilder SetEnvironmentDetails();
         IRaygunMessageBuilder SetExceptionDetails(Exception exception);
-        IRaygunMessageBuilder SetHttpDetails(IDictionary<string, object> environment);
+        IRaygunMessageBuilder SetHttpDetails(OwinEnvironment environment);
         IRaygunMessageBuilder SetMachineName(string machineName);
-        IRaygunMessageBuilder SetUserCustomData(IDictionary userCustomData);
+        IRaygunMessageBuilder SetUserCustomData(IDictionary<string, object> userCustomData);
         IRaygunMessageBuilder SetVersion();
     }
 }

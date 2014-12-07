@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace Raygun.Messages
+﻿namespace Raygun.Messages
 {
+    using System.Collections.Generic;
+
     public class RaygunMessageDetails
     {
         public RaygunMessageDetails()
@@ -16,7 +15,7 @@ namespace Raygun.Messages
         public RaygunEnvironmentMessage Environment { get; set; }
         public RaygunClientMessage Client { get; set; }
         public IList<string> Tags { get; set; }
-        public IDictionary UserCustomData { get; set; }
+        public IDictionary<string, object> UserCustomData { get; set; }
         public RaygunRequestMessage Request { get; set; }
     }
 }

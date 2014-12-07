@@ -1,7 +1,7 @@
 ﻿namespace Raygun
 {
     using System;
-    using System.Collections;
+    using System.Collections.Generic;
     using System.Reflection;
 
     using Raygun.Messages;
@@ -68,7 +68,7 @@
             return this;
         }
 
-        public IRaygunMessageBuilder SetUserCustomData(IDictionary userCustomData)
+        public IRaygunMessageBuilder SetUserCustomData(IDictionary<string, object> userCustomData)
         {
             _raygunMessage.Details.UserCustomData = userCustomData;
 
