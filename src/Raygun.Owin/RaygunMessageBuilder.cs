@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Reflection;
 
     using Raygun.Builders;
     using Raygun.Messages;
+    using Raygun.Owin;
 
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
@@ -49,6 +51,38 @@
                 _raygunMessage.Details.Error = new RaygunErrorMessage(exception);
             }
 
+            if (exception != null && exception.GetType().FullName == "System.Web.HttpException")
+            {
+                int code = (int) ReflectionHelpers.RunInstanceMethod(exception, "GetHttpCode");
+                string description = null;
+
+                if (Enum.IsDefined(typeof (HttpStatusCode), code))
+                {
+                    description = ((HttpStatusCode) code).ToString();
+                }
+
+                _raygunMessage.Details.Response = new RaygunResponseMessage { StatusCode = code, StatusDescription = description };
+            }
+
+            var webError = exception as WebException;
+            if (webError != null)
+            {
+                if (webError.Status == WebExceptionStatus.ProtocolError && webError.Response is HttpWebResponse)
+                {
+                    var response = (HttpWebResponse) webError.Response;
+                    _raygunMessage.Details.Response = new RaygunResponseMessage { StatusCode = (int) response.StatusCode, StatusDescription = response.StatusDescription };
+                }
+                else if (webError.Status == WebExceptionStatus.ProtocolError && webError.Response is FtpWebResponse)
+                {
+                    var response = (FtpWebResponse) webError.Response;
+                    _raygunMessage.Details.Response = new RaygunResponseMessage { StatusCode = (int) response.StatusCode, StatusDescription = response.StatusDescription };
+                }
+                else
+                {
+                    _raygunMessage.Details.Response = new RaygunResponseMessage { StatusDescription = webError.Status.ToString() };
+                }
+            }
+
             return this;
         }
 
@@ -57,6 +91,15 @@
             if (environment != null)
             {
                 _raygunMessage.Details.Request = RaygunRequestMessageBuilder.Build(environment);
+
+                if (_raygunMessage.Details.Response == null)
+                {
+                    _raygunMessage.Details.Response = new RaygunResponseMessage
+                    {
+                        StatusCode = environment.Get<int>(OwinConstants.ResponseStatusCode),
+                        StatusDescription = environment.Get<string>(OwinConstants.ResponseReasonPhrase)
+                    };
+                }
             }
 
             return this;

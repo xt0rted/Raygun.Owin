@@ -41,13 +41,16 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Messages\Tests\RaygunClientMessageTests.cs" />
+    <Compile Include="OwinContextHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestOwinContext.cs" />
     <Compile Include="Tests\RaygunClientTests.cs" />
     <Compile Include="Tests\RaygunMessageBuilderTests.cs" />
   </ItemGroup>

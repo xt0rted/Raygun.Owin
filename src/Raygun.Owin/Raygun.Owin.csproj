@@ -46,9 +46,11 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IRaygunMessageBuilder.cs" />
+    <Compile Include="Messages\RaygunResponseMessage.cs" />
     <Compile Include="Owin\OwinRequestExtensions.cs" />
     <Compile Include="Owin\RaygunUnhandledExceptionMiddleware.cs" />
     <Compile Include="Owin\RaygunUnhandledRequestMiddleware.cs" />
+    <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="UnhandledRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RaygunClient.cs" />
