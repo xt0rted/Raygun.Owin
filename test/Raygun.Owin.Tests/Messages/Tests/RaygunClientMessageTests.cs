@@ -22,9 +22,10 @@
         {
             // Given
             var sut = SutFactory();
+            var expected = typeof (RaygunClient).Assembly.GetName().Version.ToString();
 
             // When / Then
-            sut.Version.ShouldBe("0.1.0.0");
+            sut.Version.ShouldBe(expected);
         }
 
         [Test]
