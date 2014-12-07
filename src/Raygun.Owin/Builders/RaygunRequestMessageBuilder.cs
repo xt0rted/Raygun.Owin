@@ -47,6 +47,8 @@
                 message.RawData = temp.Substring(0, length);
             }
 
+            message.Data = GetData(request).Where(_ => _.Value != null).ToDictionary(_ => _.Key, _ => _.Value);
+
             return message;
         }
 
@@ -56,6 +58,35 @@
             return cookies
                 .Select(c => new RaygunRequestMessage.Cookie(c.Key, c.Value))
                 .ToList();
+        }
+
+        private static IEnumerable<KeyValuePair<string, object>> GetData(OwinRequest request)
+        {
+            #region OWIN v1.0.0 - 3.2.3. Other Data
+
+            yield return new KeyValuePair<string, object>(OwinConstants.OwinVersion, request.Get<string>(OwinConstants.OwinVersion));
+
+            #endregion
+
+            #region OWIN v1.0.0 - 3.2.1. Request Data
+
+            yield return new KeyValuePair<string, object>(OwinConstants.RequestProtocol, request.Get<string>(OwinConstants.RequestProtocol));
+
+            #endregion
+
+            #region OWIN Key Guidelines and Common Keys - 6. Common Keys
+
+            foreach (var pair in request.Get<IDictionary<string, object>>(OwinConstants.CommonKeys.Capabilities))
+            {
+                yield return pair;
+            }
+
+            #endregion
+
+            yield return new KeyValuePair<string, object>("host.AppName", request.Get<string>("host.AppName"));
+            yield return new KeyValuePair<string, object>("host.AppMode", request.Get<string>("host.AppMode"));
+
+            yield return new KeyValuePair<string, object>("integratedpipeline.CurrentStage", request.Get<string>("integratedpipeline.CurrentStage"));
         }
     }
 }

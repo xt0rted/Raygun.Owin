@@ -12,6 +12,7 @@
         public string IPAddress { get; set; }
         public IDictionary<string, string> QueryString { get; set; }
         public IList<Cookie> Cookies { get; set; }
+        public IDictionary<string, object> Data { get; set; }
         public IDictionary<string, string> Form { get; set; }
         public IDictionary<string, string> Headers { get; set; }
         public string RawData { get; set; }
