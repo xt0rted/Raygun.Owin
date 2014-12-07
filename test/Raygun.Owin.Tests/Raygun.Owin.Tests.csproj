@@ -49,6 +49,7 @@
     <Compile Include="Messages\Tests\RaygunClientMessageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\RaygunClientTests.cs" />
+    <Compile Include="Tests\RaygunMessageBuilderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Raygun.Owin\Raygun.Owin.csproj">
