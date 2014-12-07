@@ -1,5 +1,6 @@
 ﻿namespace Raygun.Builders
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
@@ -32,6 +33,8 @@
             message.Headers = request.Headers.ToDictionary(_ => _.Key, _ => string.Join(", ", _.Value));
             message.Headers.Remove("Cookie");
 
+            message.Cookies = GetCookies(request.Cookies);
+
             if (request.ContentType != "text/html" && request.ContentType != "application/x-www-form-urlencoded" && request.Method != "GET")
             {
                 int length = 4096;
@@ -45,6 +48,14 @@
             }
 
             return message;
+        }
+
+        private static IList<RaygunRequestMessage.Cookie> GetCookies(RequestCookieCollection cookies)
+        {
+            // ToDo: filter cookies
+            return cookies
+                .Select(c => new RaygunRequestMessage.Cookie(c.Key, c.Value))
+                .ToList();
         }
     }
 }

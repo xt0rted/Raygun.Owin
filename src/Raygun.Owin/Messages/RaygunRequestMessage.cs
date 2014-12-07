@@ -11,8 +11,21 @@
         public string HttpMethod { get; set; }
         public string IPAddress { get; set; }
         public IDictionary<string, string> QueryString { get; set; }
+        public IList<Cookie> Cookies { get; set; }
         public IDictionary<string, string> Form { get; set; }
         public IDictionary<string, string> Headers { get; set; }
         public string RawData { get; set; }
+
+        public class Cookie
+        {
+            public Cookie(string name, string value)
+            {
+                Name = name;
+                Value = value;
+            }
+
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
     }
 }
