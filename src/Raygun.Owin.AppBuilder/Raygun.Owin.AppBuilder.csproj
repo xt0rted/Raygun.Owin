@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Raygun.Owin.AppBuilder.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raygun.Owin\Raygun.Owin.csproj">
