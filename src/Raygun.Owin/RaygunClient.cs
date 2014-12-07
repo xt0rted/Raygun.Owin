@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
-using System.Text;
-using System.Threading;
-
-using Raygun.Messages;
-
-namespace Raygun
+﻿namespace Raygun
 {
-    using OwinEnvironment = IDictionary<string, object>;
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading;
+
+    using Raygun.Messages;
+
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
     public class RaygunClient
     {
+        private static readonly Lazy<string> ClientNameLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title);
+        private static readonly Lazy<string> ClientVersionLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetName().Version.ToString());
+
         private readonly RaygunSettings _settings;
 
         public RaygunClient()
@@ -23,6 +26,16 @@ namespace Raygun
         public RaygunClient(RaygunSettings settings)
         {
             _settings = settings;
+        }
+
+        internal static string ClientName
+        {
+            get { return ClientNameLoader.Value; }
+        }
+
+        internal static string ClientVersion
+        {
+            get { return ClientVersionLoader.Value; }
         }
 
         public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception)
