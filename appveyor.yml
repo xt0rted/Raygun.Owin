@@ -1,0 +1,31 @@
+branches:
+  only:
+    - dev
+
+version: 0.1.{build}
+
+skip_tags: true
+
+assembly_info:
+  patch: true
+  file: "**\CommonAssemblyInfo.*"
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}-beta"
+
+configuration: Release
+
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+
+before_build:
+  - ps: nuget restore
+
+deploy:
+  - provider: NuGet
+    server: https://www.myget.org/F/13degrees/
+    api_key:
+      secure: 9ztVruXzf0tF7J1efrUsSE2yYqB7uALKcp49ccmLMD4UNqvs3wS99xtrwZEWzwNC
+    skip_symbols: true
+    symbol_server: https://nuget.symbolsource.org/MyGet/13degrees
