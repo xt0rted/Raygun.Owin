@@ -1,22 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Raygun
+﻿namespace Raygun
 {
+    using System;
+    using System.Threading.Tasks;
+
     internal static class Constants
     {
         internal static class Headers
         {
-            /// <summary>
-            /// Content-Type
-            /// </summary>
-            internal const string ContentType = "Content-Type";
-
-            /// <summary>
-            /// Host
-            /// </summary>
-            internal const string Host = "Host";
-
             /// <summary>
             /// X-ApiKey
             /// </summary>

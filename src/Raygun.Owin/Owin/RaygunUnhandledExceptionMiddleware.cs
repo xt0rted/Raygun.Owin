@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Raygun.Owin
+﻿namespace Raygun.Owin
 {
-    using AppFunc = Func<IDictionary<string, object>, Task>;
-    using OwinEnvironment = IDictionary<string, object>;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
     public class RaygunUnhandledExceptionMiddleware
     {
@@ -38,42 +37,42 @@ namespace Raygun.Owin
             try
             {
                 return _next.Invoke(environment)
-                           .ContinueWith(appTask =>
-                           {
-                               if (appTask.IsFaulted)
-                               {
-                                   var errorLoggingErrors = appTask.Exception.InnerExceptions
-                                                                   .Select(innerException =>
-                                                                   {
-                                                                       try
-                                                                       {
-                                                                           HandleException(environment, innerException);
-                                                                       }
-                                                                       catch
-                                                                       {
-                                                                           return true;
-                                                                       }
+                            .ContinueWith(appTask =>
+                            {
+                                if (appTask.IsFaulted)
+                                {
+                                    var errorLoggingErrors = appTask.Exception.InnerExceptions
+                                                                    .Select(innerException =>
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            HandleException(environment, innerException);
+                                                                        }
+                                                                        catch
+                                                                        {
+                                                                            return true;
+                                                                        }
 
-                                                                       return false;
-                                                                   })
-                                                                   .Any();
+                                                                        return false;
+                                                                    })
+                                                                    .Any();
 
-                                   if (errorLoggingErrors)
-                                   {
-                                       return Constants.FromError(appTask.Exception);
-                                   }
+                                    if (errorLoggingErrors)
+                                    {
+                                        return Constants.FromError(appTask.Exception);
+                                    }
 
-                                   return Constants.CompletedTask;
-                               }
+                                    return Constants.CompletedTask;
+                                }
 
-                               var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
-                               if (exception != null)
-                               {
-                                   return HandleExceptionWrapper(environment, exception);
-                               }
+                                var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
+                                if (exception != null)
+                                {
+                                    return HandleExceptionWrapper(environment, exception);
+                                }
 
-                               return Constants.CompletedTask;
-                           });
+                                return Constants.CompletedTask;
+                            });
             }
             catch (Exception ex)
             {

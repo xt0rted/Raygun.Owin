@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Raygun
+﻿namespace Raygun
 {
+    using System;
+
     public class UnhandledRequestException : Exception
     {
         public UnhandledRequestException()

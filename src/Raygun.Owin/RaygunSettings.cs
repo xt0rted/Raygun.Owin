@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-
-using Raygun.Messages;
-
-namespace Raygun
+﻿namespace Raygun
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+
+    using Raygun.Messages;
+
     public class RaygunSettings
     {
         public RaygunSettings()

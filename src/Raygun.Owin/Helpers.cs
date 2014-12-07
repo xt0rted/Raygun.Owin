@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Raygun
+﻿namespace Raygun
 {
-    using OwinEnvironment = IDictionary<string, object>;
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
     internal static class Helpers
     {

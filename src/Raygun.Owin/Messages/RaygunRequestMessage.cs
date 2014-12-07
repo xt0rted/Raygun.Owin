@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
-
     public class RaygunRequestMessage
     {
         public string HostName { get; set; }

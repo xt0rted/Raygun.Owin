@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Raygun.Owin
+﻿namespace Raygun.Owin
 {
-    using AppFunc = Func<IDictionary<string, object>, Task>;
-    using OwinEnvironment = IDictionary<string, object>;
+    using System;
+    using System.Threading.Tasks;
+
+    using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
     public class RaygunUnhandledRequestMiddleware
     {

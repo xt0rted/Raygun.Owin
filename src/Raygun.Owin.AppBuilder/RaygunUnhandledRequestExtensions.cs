@@ -1,9 +1,9 @@
-﻿using System;
-
-using Owin;
-
-namespace Raygun.Owin
+﻿namespace Raygun.Owin
 {
+    using System;
+
+    using global::Owin;
+
     public static class RaygunUnhandledRequestExtensions
     {
         public static IAppBuilder UseRaygunUnhandledRequestLogger(this IAppBuilder builder)

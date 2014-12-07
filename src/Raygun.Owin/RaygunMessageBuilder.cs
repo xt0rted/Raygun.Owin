@@ -53,7 +53,7 @@
 
             if (exception != null && exception.GetType().FullName == "System.Web.HttpException")
             {
-                int code = (int) ReflectionHelpers.RunInstanceMethod(exception, "GetHttpCode");
+                var code = (int) ReflectionHelpers.RunInstanceMethod(exception, "GetHttpCode");
                 string description = null;
 
                 if (Enum.IsDefined(typeof (HttpStatusCode), code))
