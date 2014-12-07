@@ -126,4 +126,4 @@ To use Hg you will need to clone or fork this repository and then import it into
 
 ## Copyright and license
 
-Copyright (c) 2013 Brian Surowiec under [the MIT License](LICENSE).
+Copyright (c) 2014 Brian Surowiec under [the MIT License](LICENSE).

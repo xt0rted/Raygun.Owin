@@ -4,7 +4,7 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("Brian Surowiec")]
 [assembly: AssemblyProduct("Raygun.Owin")]
-[assembly: AssemblyCopyright("Copyright © 2013 Brian Surowiec")]
+[assembly: AssemblyCopyright("Copyright \x00a9 2014 Brian Surowiec")]
 
 [assembly: AssemblyInformationalVersion("0.1.0")]
 
