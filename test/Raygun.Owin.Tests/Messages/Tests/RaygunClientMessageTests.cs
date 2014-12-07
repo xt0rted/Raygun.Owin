@@ -8,24 +8,23 @@
     public class RaygunClientMessageTests
     {
         [Test]
-        public void Should_return_name_from_the_AssemblyTitleAttribute()
+        public void Should_return_name_from_the_client()
         {
             // Given
             var sut = SutFactory();
 
             // When / Then
-            sut.Name.ShouldBe("Raygun.Owin");
+            sut.Name.ShouldBe(RaygunClient.ClientName);
         }
 
         [Test]
-        public void Should_return_version_from_the_AssemblyVersionAttribute()
+        public void Should_return_version_from_the_client()
         {
             // Given
             var sut = SutFactory();
-            var expected = typeof (RaygunClient).Assembly.GetName().Version.ToString();
 
             // When / Then
-            sut.Version.ShouldBe(expected);
+            sut.Version.ShouldBe(RaygunClient.ClientVersion);
         }
 
         [Test]
