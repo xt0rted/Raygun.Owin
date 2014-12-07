@@ -1,5 +1,9 @@
 # Raygun.Owin
 
+[![Build Status](https://ci.appveyor.com/api/projects/status/acwjo8gsxa6u12ur?svg=true)](https://ci.appveyor.com/project/xt0rted/raygun-owin)
+[![NuGet Status](http://img.shields.io/nuget/v/Raygun.Owin.svg?style=flat)](https://www.nuget.org/packages/Raygun.Owin/)
+[![MyGet Status](https://img.shields.io/myget/13degrees/vpre/Raygun.Owin.svg?style=flat&label=myget)](http://www.myget.org/f/13degrees)
+
 OWIN middleware for [Raygun.io](http://raygun.io/)
 
 Raygun.Owin is based around the official library from [Mindscape](https://github.com/MindscapeHQ/raygun4net) but does not reference `System.Web`. Because of this, and the lack of `HttpContext`, the more generic `IDictionary<string, object>` environment is used making it compatible with any OWIN implementation.
