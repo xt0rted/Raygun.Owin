@@ -11,7 +11,7 @@
 
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
-    public class RaygunClient
+    public class RaygunClient : RaygunClientBase
     {
         private static readonly Lazy<string> ClientNameLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title);
         private static readonly Lazy<string> ClientVersionLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetName().Version.ToString());
@@ -69,9 +69,10 @@
             }
 
             Send(message);
+            FlagAsSent(exception);
         }
 
-        public void Send(RaygunMessage raygunMessage)
+        protected void Send(RaygunMessage raygunMessage)
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {

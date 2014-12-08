@@ -19,7 +19,19 @@
 
             message.StackTrace = BuildStackTrace(exception);
 
-            message.Data = exception.Data;
+            if (exception.Data != null)
+            {
+                var data = new Dictionary<object, object>();
+                foreach (var key in exception.Data.Keys)
+                {
+                    if (!RaygunClientBase.SentKey.Equals(key))
+                    {
+                        data[key] = exception.Data[key];
+                    }
+                }
+
+                message.Data = data;
+            }
 
             if (exception.InnerException != null)
             {
