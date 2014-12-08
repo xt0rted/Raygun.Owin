@@ -40,7 +40,7 @@
             get { return ClientVersionLoader.Value; }
         }
 
-        public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception, IList<string> tags = null)
+        public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
             var mergedTags = _settings.Tags
                                       .Union(tags ?? Enumerable.Empty<string>())
@@ -54,13 +54,14 @@
                                               .SetClientDetails()
                                               .SetVersion()
                                               .SetTags(mergedTags)
+                                              .SetUserCustomData(userCustomData)
                                               .Build();
             return message;
         }
 
-        public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null)
+        public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
-            var message = BuildMessage(environment, exception, tags);
+            var message = BuildMessage(environment, exception, tags, userCustomData);
 
             if (_settings.MessageInspector != null)
             {

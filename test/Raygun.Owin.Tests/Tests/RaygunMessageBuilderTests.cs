@@ -1,6 +1,7 @@
 ﻿namespace Raygun.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Web;
 
@@ -95,6 +96,23 @@
             // Then
             result.Details.Response.StatusCode.ShouldBe(302);
             result.Details.Response.StatusDescription.ShouldBe("It's broken");
+        }
+
+        [Test]
+        public void Should_set_custom_user_data()
+        {
+            // Given
+            var data = new Dictionary<string, object>
+            {
+                { "number", 13 }
+            };
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUserCustomData(data).Build();
+
+            // Then
+            result.Details.UserCustomData.ShouldBe(data);
         }
 
         [Test]
