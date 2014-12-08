@@ -1,7 +1,6 @@
 ﻿namespace Raygun.Owin
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
@@ -19,6 +18,11 @@
                 throw new ArgumentNullException("next");
             }
 
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             _next = next;
 
             if (!string.IsNullOrEmpty(settings.ApiKey))
@@ -31,80 +35,36 @@
         {
             if (_client == null)
             {
-                return _next.Invoke(environment);
+                return _next(environment);
             }
 
-            try
+            return _next(environment).ContinueWith(appTask =>
             {
-                return _next.Invoke(environment)
-                            .ContinueWith(appTask =>
-                            {
-                                if (appTask.IsFaulted)
-                                {
-                                    var errorLoggingErrors = appTask.Exception.InnerExceptions
-                                                                    .Select(innerException =>
-                                                                    {
-                                                                        try
-                                                                        {
-                                                                            HandleException(environment, innerException);
-                                                                        }
-                                                                        catch
-                                                                        {
-                                                                            return true;
-                                                                        }
-
-                                                                        return false;
-                                                                    })
-                                                                    .Any();
-
-                                    if (errorLoggingErrors)
-                                    {
-                                        return Constants.FromError(appTask.Exception);
-                                    }
-
-                                    return Constants.CompletedTask;
-                                }
-
-                                var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
-                                if (exception != null)
-                                {
-                                    return HandleExceptionWrapper(environment, exception);
-                                }
-
-                                return Constants.CompletedTask;
-                            });
-            }
-            catch (Exception ex)
-            {
-                try
+                if (appTask.IsFaulted && appTask.Exception != null)
                 {
-                    HandleException(environment, ex);
-                    return Constants.CompletedTask;
-                }
-                catch
-                {
+                    foreach (var innerException in appTask.Exception.InnerExceptions)
+                    {
+                        HandleException(environment, innerException);
+                    }
+
+                    throw appTask.Exception;
                 }
 
-                throw;
-            }
+                var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
+                if (exception != null)
+                {
+                    HandleException(environment, exception);
+
+                    throw exception;
+                }
+
+                return appTask;
+            });
         }
 
         private void HandleException(OwinEnvironment environment, Exception exception)
         {
             _client.SendInBackground(environment, exception);
-        }
-
-        private Task HandleExceptionWrapper(OwinEnvironment environment, Exception exception)
-        {
-            try
-            {
-                HandleException(environment, exception);
-                return Constants.CompletedTask;
-            }
-            catch
-            {
-                return Constants.FromError(exception);
-            }
         }
     }
 }
