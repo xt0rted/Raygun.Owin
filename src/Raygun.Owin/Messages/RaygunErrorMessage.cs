@@ -8,6 +8,6 @@
         public IDictionary<object, object> Data { get; set; }
         public string ClassName { get; set; }
         public string Message { get; set; }
-        public RaygunErrorStackTraceLineMessage[] StackTrace { get; set; }
+        public IEnumerable<RaygunErrorStackTraceLineMessage> StackTrace { get; set; }
     }
 }

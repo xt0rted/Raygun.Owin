@@ -45,14 +45,15 @@
         {
             var lines = new List<RaygunErrorStackTraceLineMessage>();
 
+        private static IEnumerable<RaygunErrorStackTraceLineMessage> BuildStackTrace(Exception exception)
+        {
             var stackTrace = new StackTrace(exception, true);
             var frames = stackTrace.GetFrames();
 
             if (frames == null || frames.Length == 0)
             {
-                var line = new RaygunErrorStackTraceLineMessage { FileName = "none", LineNumber = 1 };
-                lines.Add(line);
-                return lines.ToArray();
+                yield return new RaygunErrorStackTraceLineMessage { FileName = "none", LineNumber = 0 };
+                yield break;
             }
 
             foreach (var frame in frames)
@@ -74,19 +75,15 @@
 
                     var className = method.ReflectedType != null ? method.ReflectedType.FullName : "(unknown)";
 
-                    var line = new RaygunErrorStackTraceLineMessage
+                    yield return new RaygunErrorStackTraceLineMessage
                     {
                         FileName = file,
                         LineNumber = lineNumber,
                         MethodName = methodName,
                         ClassName = className
                     };
-
-                    lines.Add(line);
                 }
             }
-
-            return lines.ToArray();
         }
     }
 }
