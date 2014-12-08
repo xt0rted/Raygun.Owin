@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A49AB956
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raygun.Owin.AppBuilder", "src\Raygun.Owin.AppBuilder\Raygun.Owin.AppBuilder.csproj", "{6C390224-B898-461A-9E94-81D099E85BA9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C9BB03AF-93F6-46CE-A4B9-C0B5EA0EE520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raygun.Owin.Samples.NancyFX", "samples\Raygun.Owin.Samples.NancyFX\Raygun.Owin.Samples.NancyFX.csproj", "{F82113C4-D8D8-4321-A73B-A77C3259A916}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,11 +41,16 @@ Global
 		{6C390224-B898-461A-9E94-81D099E85BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C390224-B898-461A-9E94-81D099E85BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C390224-B898-461A-9E94-81D099E85BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F82113C4-D8D8-4321-A73B-A77C3259A916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82113C4-D8D8-4321-A73B-A77C3259A916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82113C4-D8D8-4321-A73B-A77C3259A916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82113C4-D8D8-4321-A73B-A77C3259A916}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E4F7FBC0-509F-465E-9362-ABB3D6972137} = {A49AB956-2200-4511-B015-0CBCD07C0E91}
+		{F82113C4-D8D8-4321-A73B-A77C3259A916} = {C9BB03AF-93F6-46CE-A4B9-C0B5EA0EE520}
 	EndGlobalSection
 EndGlobal
