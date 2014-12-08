@@ -1,7 +1,9 @@
 ﻿namespace Raygun
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Text;
@@ -38,8 +40,12 @@
             get { return ClientVersionLoader.Value; }
         }
 
-        public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception)
+        public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception, IList<string> tags = null)
         {
+            var mergedTags = _settings.Tags
+                                      .Union(tags ?? Enumerable.Empty<string>())
+                                      .ToList();
+
             var message = RaygunMessageBuilder.New
                                               .SetHttpDetails(environment)
                                               .SetEnvironmentDetails()
@@ -47,21 +53,14 @@
                                               .SetExceptionDetails(exception)
                                               .SetClientDetails()
                                               .SetVersion()
+                                              .SetTags(mergedTags)
                                               .Build();
             return message;
         }
 
-        public void SendInBackground(OwinEnvironment environment, Exception exception)
+        public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null)
         {
-            var message = BuildMessage(environment, exception);
-
-            if (_settings.Tags != null)
-            {
-                foreach (var tag in _settings.Tags)
-                {
-                    message.Details.Tags.Add(tag);
-                }
-            }
+            var message = BuildMessage(environment, exception, tags);
 
             if (_settings.MessageInspector != null)
             {

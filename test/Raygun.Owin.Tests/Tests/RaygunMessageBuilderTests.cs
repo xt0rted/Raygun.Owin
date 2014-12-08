@@ -97,6 +97,50 @@
             result.Details.Response.StatusDescription.ShouldBe("It's broken");
         }
 
+        [Test]
+        public void Should_set_tags()
+        {
+            // Given
+            var tags = new[] { "tag1", "tag2" };
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetTags(tags).Build();
+
+            // Then
+            result.Details.Tags.ShouldNotBe(null);
+            result.Details.Tags.ShouldBe(tags);
+        }
+
+        [Test]
+        public void Should_not_set_tags_if_empty()
+        {
+            // Given
+            var tags = new string[0];
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetTags(tags).Build();
+
+            // Then
+            result.Details.Tags.ShouldNotBe(null);
+            result.Details.Tags.ShouldBeEmpty();
+        }
+
+        [Test]
+        public void Should_not_set_tags_if_null()
+        {
+            // Given
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetTags(null).Build();
+
+            // Then
+            result.Details.Tags.ShouldNotBe(null);
+            result.Details.Tags.ShouldBeEmpty();
+        }
+
         private static IRaygunMessageBuilder SutFactory(Exception exception = null)
         {
             if (exception == null)

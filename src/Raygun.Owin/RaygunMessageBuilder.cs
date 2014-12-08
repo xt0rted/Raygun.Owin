@@ -119,6 +119,16 @@
             return this;
         }
 
+        public IRaygunMessageBuilder SetTags(IList<string> tags)
+        {
+            if (tags != null)
+            {
+                _raygunMessage.Details.Tags = tags;
+            }
+
+            return this;
+        }
+
         public IRaygunMessageBuilder SetVersion()
         {
             var entryAssembly = Assembly.GetEntryAssembly();
