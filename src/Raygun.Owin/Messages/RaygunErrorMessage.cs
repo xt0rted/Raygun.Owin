@@ -5,6 +5,7 @@
     public class RaygunErrorMessage
     {
         public RaygunErrorMessage InnerError { get; set; }
+        public IEnumerable<RaygunErrorMessage> InnerErrors { get; set; }
         public IDictionary<object, object> Data { get; set; }
         public string ClassName { get; set; }
         public string Message { get; set; }

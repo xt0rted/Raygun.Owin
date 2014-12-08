@@ -33,7 +33,12 @@
                 message.Data = data;
             }
 
-            if (exception.InnerException != null)
+            var ae = exception as AggregateException;
+            if (ae != null && ae.InnerException != null)
+            {
+                message.InnerErrors = BuildInnerErrors(ae.InnerExceptions);
+            }
+            else if (exception.InnerException != null)
             {
                 message.InnerError = Build(exception.InnerException);
             }
@@ -41,9 +46,13 @@
             return message;
         }
 
-        private static RaygunErrorStackTraceLineMessage[] BuildStackTrace(Exception exception)
+        private static IEnumerable<RaygunErrorMessage> BuildInnerErrors(IEnumerable<Exception> exceptions)
         {
-            var lines = new List<RaygunErrorStackTraceLineMessage>();
+            foreach (var exception in exceptions)
+            {
+                yield return Build(exception);
+            }
+        }
 
         private static IEnumerable<RaygunErrorStackTraceLineMessage> BuildStackTrace(Exception exception)
         {
