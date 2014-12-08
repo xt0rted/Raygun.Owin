@@ -48,7 +48,7 @@
         {
             if (exception != null)
             {
-                _raygunMessage.Details.Error = new RaygunErrorMessage(exception);
+                _raygunMessage.Details.Error = RaygunErrorMessageBuilder.Build(exception);
             }
 
             if (exception != null && exception.GetType().FullName == "System.Web.HttpException")

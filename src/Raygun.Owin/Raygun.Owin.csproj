@@ -42,6 +42,8 @@
     </Compile>
     <Compile Include="App_Packages\LibOwin.1.0\LibOwin.cs" />
     <Compile Include="Builders\RaygunEnvironmentMessageBuilder.cs" />
+    <Compile Include="Builders\RaygunErrorMessageBuilder.cs" />
+    <Compile Include="Builders\RaygunErrorMessageBuilderBase.cs" />
     <Compile Include="Builders\RaygunRequestMessageBuilder.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers.cs" />
