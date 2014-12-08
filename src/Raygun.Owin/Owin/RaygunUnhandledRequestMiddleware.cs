@@ -18,6 +18,11 @@
                 throw new ArgumentNullException("next");
             }
 
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             _next = next;
 
             if (!string.IsNullOrEmpty(settings.ApiKey))
@@ -26,34 +31,19 @@
             }
         }
 
-        public Task Invoke(OwinEnvironment environment)
+        public async Task Invoke(OwinEnvironment environment)
         {
+            await _next(environment);
+
             if (_client == null)
             {
-                return _next.Invoke(environment);
+                return;
             }
 
-            var exception = new UnhandledRequestException();
-
-            return HandleExceptionWrapper(environment, exception);
-        }
-
-        private Task HandleException(OwinEnvironment environment, Exception exception)
-        {
-            _client.SendInBackground(environment, exception);
-
-            return Constants.CompletedTask;
-        }
-
-        private Task HandleExceptionWrapper(OwinEnvironment environment, Exception exception)
-        {
-            try
+            var responseCode = environment.Get<int>(OwinConstants.ResponseStatusCode);
+            if (responseCode == 404)
             {
-                return HandleException(environment, exception);
-            }
-            catch
-            {
-                return Constants.FromError(exception);
+                _client.SendInBackground(environment, new UnhandledRequestException());
             }
         }
     }

@@ -38,7 +38,7 @@ To log unhandled exceptions you will need to register the `RaygunUnhandledExcept
 
 #### Handling Requests
 
-To log unhandled requests you will need to register the `RaygunUnhandledRequestMiddleware` as the last piece of middleware. Since requests will pass through you may alternatively choose to register this earlier in the pipeline such as before a catch all error page. You may also exclude this altogether and log the unhandled requests from inside your application or another piece of middleware.
+To log unhandled requests you will need to register the `RaygunUnhandledRequestMiddleware` before the middleware you would like to log unhandled requests for. Since requests will pass through you may also choose to register a catch all error page. You may also exclude this altogether and log the unhandled requests from inside your application or another piece of middleware.
 
 
 ### Example
@@ -49,6 +49,7 @@ public class Startup
     public static void Configuration(IAppBuilder app)
     {
         app.UseRaygunUnhandledExceptionLogger();
+        app.UseRaygunUnhandledRequestLogger();
 
         app.UseCassette();
         app.UseNancy(options =>
@@ -57,8 +58,6 @@ public class Startup
             // this will allow 404 errors to pass through to the next piece of middleware
             options.PassThroughWhenStatusCodesAre(HttpStatusCode.NotFound);
         });
-
-        app.UseRaygunUnhandledRequestLogger();
     }
 }
 ```
