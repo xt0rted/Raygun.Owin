@@ -20,7 +20,7 @@
 
             // Then
             result.Error.ClassName.ShouldBe("System.InvalidOperationException");
-            result.Error.Message.ShouldBe("InvalidOperationException: It's broken");
+            result.Error.Message.ShouldBe("It's broken");
             result.Response.ShouldBe(null);
         }
 

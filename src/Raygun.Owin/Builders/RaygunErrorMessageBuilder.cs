@@ -14,7 +14,7 @@
 
             var exceptionType = exception.GetType();
 
-            message.Message = string.Format("{0}: {1}", exceptionType.Name, exception.Message);
+            message.Message = exception.Message;
             message.ClassName = exceptionType.FullName;
 
             message.StackTrace = BuildStackTrace(exception);
