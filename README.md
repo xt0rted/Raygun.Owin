@@ -28,6 +28,7 @@ The API key and endpoint override can be set in the middleware settings, or they
 <appSettings>
     <add key="raygun:apiKey" value="abc123" />
     <add key="raygun:apiEndpoint" value="https://api.raygun.io/entries" />
+    <add key="raygun:tags" value="tag1, tag2, tag3" /> <!-- supported delimiters: , ; | -->
 </appSettings>
 ```
 
@@ -49,6 +50,10 @@ public class Startup
     public static void Configuration(IAppBuilder app)
     {
         var settings = new RaygunSettings();
+
+#if DEBUG
+        settings.Tags.Add("debug");
+#endif
 
         app.UseRaygun(options => {
             options.LogUnhandledExceptions = true;
