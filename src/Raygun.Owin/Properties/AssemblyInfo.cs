@@ -3,4 +3,5 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Raygun.Owin")]
 
+[assembly: InternalsVisibleTo("Raygun.Owin.AppBuilder")]
 [assembly: InternalsVisibleTo("Raygun.Owin.Tests")]

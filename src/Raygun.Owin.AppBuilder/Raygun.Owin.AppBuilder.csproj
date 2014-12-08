@@ -42,9 +42,9 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppBuilderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RaygunUnhandledExceptionExtensions.cs" />
-    <Compile Include="RaygunUnhandledRequestExtensions.cs" />
+    <Compile Include="RaygunOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

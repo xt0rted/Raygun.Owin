@@ -48,16 +48,18 @@ public class Startup
 {
     public static void Configuration(IAppBuilder app)
     {
-        app.UseRaygunUnhandledExceptionLogger();
-        app.UseRaygunUnhandledRequestLogger();
+        var settings = new RaygunSettings();
+
+        app.UseRaygun(options => {
+            options.LogUnhandledExceptions = true;
+            options.LogUnhandledRequests = true;
+            options.Settings = settings;
+        });
 
         app.UseCassette();
-        app.UseNancy(options =>
-        {
-            // NOTE: requires nancy v0.20.0 or newer
-            // this will allow 404 errors to pass through to the next piece of middleware
-            options.PassThroughWhenStatusCodesAre(HttpStatusCode.NotFound);
-        });
+
+        app.UseNancy();
+        app.UseStageMarker(PipelineStage.MapHandler);
     }
 }
 ```
@@ -87,6 +89,48 @@ public class Startup
 }
 ```
 
+
+## Usage with NancyFX
+
+By default [Nancy](http://nancyfx.org/) is a terminating middleware which means requests will not be passed on if they can't be handled. Because of this unhandled exceptions won't be passed on for the `RaygunUnhandledExceptionMiddleware` to log. One way to get around this is like so:
+
+```csharp
+public class Startup
+{
+    public static void Configuration(IAppBuilder app)
+    {
+        var settings = new RaygunSettings();
+
+        app.UseRaygun(options => {
+            options.LogUnhandledExceptions = true;
+            options.LogUnhandledRequests = true;
+            options.Settings = settings;
+        });
+
+        app.UseNancy(options =>
+        {
+            options.PerformPassThrough = context =>
+            {
+                if (context.Response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    Exception exception;
+                    if (context.TryGetException(out exception))
+                    {
+                        if (exception is RequestExecutionException)
+                        {
+                            exception = exception.InnerException;
+                        }
+
+                        new RaygunClient(settings).SendInBackground(context.GetOwinEnvironment(), exception);
+                    }
+                }
+
+                return false;
+            };
+        });
+    }
+}
+```
 
 ## Usage with Web API
 
