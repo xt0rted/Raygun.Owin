@@ -17,8 +17,23 @@
     {
         private static readonly Lazy<string> ClientNameLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title);
         private static readonly Lazy<string> ClientVersionLoader = new Lazy<string>(() => typeof (RaygunClient).Assembly.GetName().Version.ToString());
+        private static readonly List<Type> WrapperExceptions = new List<Type>();
 
         private readonly RaygunSettings _settings;
+
+        static RaygunClient()
+        {
+            AddWrapperExceptions(typeof (TargetInvocationException));
+
+            try
+            {
+                // Since we don't reference the System.Web assembly we need to try to lazily load this reference
+                AddWrapperExceptions(Assembly.ReflectionOnlyLoad("System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a").GetType("System.Web.HttpUnhandledException"));
+            }
+            catch
+            {
+            }
+        }
 
         public RaygunClient()
             : this(new RaygunSettings())
@@ -40,8 +55,39 @@
             get { return ClientVersionLoader.Value; }
         }
 
+        public static void AddWrapperExceptions(params Type[] wrapperExceptions)
+        {
+            foreach (var type in wrapperExceptions)
+            {
+                if (!WrapperExceptions.Contains(type))
+                {
+                    WrapperExceptions.Add(type);
+                }
+            }
+        }
+
+        public static void RemoveWrapperExceptions(params Type[] wrapperExceptions)
+        {
+            foreach (var type in wrapperExceptions)
+            {
+                WrapperExceptions.Remove(type);
+            }
+        }
+
+        private Exception StripWrapperExceptions(Exception exception)
+        {
+            if (exception != null && WrapperExceptions.Any(wrapperException => exception.GetType() == wrapperException && exception.InnerException != null))
+            {
+                return StripWrapperExceptions(exception.InnerException);
+            }
+
+            return exception;
+        }
+
         public RaygunMessage BuildMessage(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
+            exception = StripWrapperExceptions(exception);
+
             var mergedTags = _settings.Tags
                                       .Union(tags ?? Enumerable.Empty<string>())
                                       .ToList();
