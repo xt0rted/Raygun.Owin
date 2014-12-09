@@ -5,6 +5,12 @@
 
     internal static class ReflectionHelpers
     {
+        // http://stackoverflow.com/q/1196991/39605
+        public static object GetPropertyValue(object src, string propName)
+        {
+            return src.GetType().GetProperty(propName).GetValue(src, null);
+        }
+
         public static object RunInstanceMethod(object source, string method)
         {
             return RunInstanceMethod(source, method, new object[] { });

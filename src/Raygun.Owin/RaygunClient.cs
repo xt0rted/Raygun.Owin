@@ -74,6 +74,25 @@
             }
         }
 
+        public static void AddIgnoredExceptionFilters(params Func<Exception, bool>[] exceptionFilters)
+        {
+            foreach (var filter in exceptionFilters)
+            {
+                if (!IgnoredExceptionFilters.Contains(filter))
+                {
+                    IgnoredExceptionFilters.Add(filter);
+                }
+            }
+        }
+
+        public static void RemoveIgnoredExceptionFilters(params Func<Exception, bool>[] exceptionFilters)
+        {
+            foreach (var filter in exceptionFilters)
+            {
+                IgnoredExceptionFilters.Remove(filter);
+            }
+        }
+
         private Exception StripWrapperExceptions(Exception exception)
         {
             if (exception != null && WrapperExceptions.Any(wrapperException => exception.GetType() == wrapperException && exception.InnerException != null))
@@ -107,31 +126,37 @@
 
         public void Send(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
-            var message = BuildMessage(environment, exception, tags, userCustomData);
-
-            if (_settings.MessageInspector != null)
+            if (CanSend(exception))
             {
-                _settings.MessageInspector(message);
-            }
+                var message = BuildMessage(environment, exception, tags, userCustomData);
 
-            Send(message);
-            FlagAsSent(exception);
+                if (_settings.MessageInspector != null)
+                {
+                    _settings.MessageInspector(message);
+                }
+
+                Send(message);
+                FlagAsSent(exception);
+            }
         }
 
         public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
-            var message = BuildMessage(environment, exception, tags, userCustomData);
-
-            if (_settings.MessageInspector != null)
+            if (CanSend(exception))
             {
-                _settings.MessageInspector(message);
+                var message = BuildMessage(environment, exception, tags, userCustomData);
+
+                if (_settings.MessageInspector != null)
+                {
+                    _settings.MessageInspector(message);
+                }
+
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    Send(message);
+                    FlagAsSent(exception);
+                });
             }
-
-            ThreadPool.QueueUserWorkItem(_ =>
-            {
-                Send(message);
-                FlagAsSent(exception);
-            });
         }
 
         protected void Send(RaygunMessage raygunMessage)
