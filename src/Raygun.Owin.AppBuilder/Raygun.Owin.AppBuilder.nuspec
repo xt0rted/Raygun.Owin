@@ -13,6 +13,7 @@
     <tags>OWIN Raygun</tags>
     <dependencies>
       <dependency id="Owin" version="1.0" />
+      <dependency id="Raygun.Owin" version="$version$" />
     </dependencies>
   </metadata>
 </package>
