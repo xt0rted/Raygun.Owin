@@ -33,6 +33,20 @@
             catch
             {
             }
+
+            AddIgnoredExceptionFilters(e =>
+            {
+                if (e.GetType().FullName == "System.Web.HttpException")
+                {
+                    var errorCode = (int) ReflectionHelpers.GetPropertyValue(e, "ErrorCode");
+                    if (errorCode == unchecked ((int) 0x80070057))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
         }
 
         public RaygunClient()
