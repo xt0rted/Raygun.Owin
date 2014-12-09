@@ -105,7 +105,7 @@
             return message;
         }
 
-        public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
+        public void Send(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
             var message = BuildMessage(environment, exception, tags, userCustomData);
 
@@ -118,32 +118,45 @@
             FlagAsSent(exception);
         }
 
-        protected void Send(RaygunMessage raygunMessage)
+        public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
+            var message = BuildMessage(environment, exception, tags, userCustomData);
+
+            if (_settings.MessageInspector != null)
+            {
+                _settings.MessageInspector(message);
+            }
+
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                using (var client = new WebClient())
+                Send(message);
+                FlagAsSent(exception);
+            });
+        }
+
+        protected void Send(RaygunMessage raygunMessage)
+        {
+            using (var client = new WebClient())
+            {
+                client.Headers.Add(Constants.Headers.ApiKey, _settings.ApiKey);
+                client.Encoding = Encoding.UTF8;
+
+                try
                 {
-                    client.Headers.Add(Constants.Headers.ApiKey, _settings.ApiKey);
-                    client.Encoding = Encoding.UTF8;
+                    var message = SimpleJson.SerializeObject(raygunMessage);
 
-                    try
+                    client.UploadString(_settings.ApiEndpoint, message);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", ex.Message));
+
+                    if (_settings.ThrowOnError)
                     {
-                        var message = SimpleJson.SerializeObject(raygunMessage);
-
-                        client.UploadString(_settings.ApiEndpoint, message);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", ex.Message));
-
-                        if (_settings.ThrowOnError)
-                        {
-                            throw;
-                        }
+                        throw;
                     }
                 }
-            });
+            }
         }
     }
 }
