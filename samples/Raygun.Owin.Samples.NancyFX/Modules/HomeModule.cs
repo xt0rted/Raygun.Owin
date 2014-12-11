@@ -1,9 +1,15 @@
 ﻿namespace Raygun.Owin.Samples.NancyFX.Modules
 {
     using System;
+    using System.Linq;
 
     using Nancy;
+    using Nancy.Authentication.Forms;
     using Nancy.Cookies;
+    using Nancy.ModelBinding;
+    using Nancy.Security;
+
+    using Raygun.Owin.Samples.NancyFX.Models;
 
     public class HomeModule : NancyModule
     {
@@ -21,7 +27,10 @@
                 return null;
             });
 
-            Get["/"] = _ => View["Index"];
+            Get["/"] = _ => View["Index", new
+            {
+                IsAuthenticated = Context.CurrentUser != null
+            }];
 
             Get["/error"] = _ =>
             {
@@ -32,6 +41,36 @@
             Post["/form-error"] = _ =>
             {
                 throw new NotImplementedException("Route: /form-error");
+            };
+
+            Get["/login"] = _ => View["Login"];
+            Post["/login"] = _ =>
+            {
+                var model = this.Bind<LoginModel>();
+
+                var user = UserMapper.Users.FirstOrDefault(u => string.Equals(u.UserName, model.UserName, StringComparison.OrdinalIgnoreCase));
+
+                if (user == null)
+                {
+                    throw new NotImplementedException("User not found.");
+                }
+
+                return this.LoginAndRedirect(user.Id);
+            };
+
+            Get["/logout"] = _ => this.LogoutAndRedirect("~/");
+
+            Get["/account"] = _ =>
+            {
+                this.RequiresAuthentication();
+
+                var user = (UserIdentity) Context.CurrentUser;
+
+                return View["Account", new
+                {
+                    Id = user.UserId,
+                    UserName = user.UserName
+                }];
             };
         }
     }

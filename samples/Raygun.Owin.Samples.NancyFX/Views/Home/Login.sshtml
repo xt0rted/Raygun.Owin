@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Raygun.Owin Sample</title>
+</head>
+<body>
+    <form method="POST">
+        <table>
+            <tr>
+                <td>User Name</td>
+                <td>
+                    <input type="text" name="UserName" value=""/>
+                    <span style="display: inline-block">try test1, test2, test3, or test4</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>
+                    <input type="password" name="Password" value=""/>
+                    <span style="display: inline-block">any value will work</span>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

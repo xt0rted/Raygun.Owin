@@ -3,6 +3,7 @@
 namespace Raygun.Owin.Samples.NancyFX
 {
     using System;
+    using System.Security.Claims;
 
     using global::Owin;
 
@@ -12,11 +13,22 @@ namespace Raygun.Owin.Samples.NancyFX
     using Nancy.Extensions;
     using Nancy.Owin;
 
+    using Raygun.Messages;
+
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var settings = new RaygunSettings();
+            var settings = new RaygunSettings
+            {
+                LoadUserDetails = environment =>
+                {
+                    var request = new OwinRequest(environment);
+
+                    return GetRaygunIdentifierForNancyContext(request) ??
+                           GetRaygunIdentifierForClaimsPrincipal(request);
+                }
+            };
 
 #if DEBUG
             settings.Tags.Add("debug");
@@ -60,6 +72,52 @@ namespace Raygun.Owin.Samples.NancyFX
                     return false;
                 };
             });
+        }
+
+        private RaygunIdentifierMessage GetRaygunIdentifierForNancyContext(OwinRequest request)
+        {
+            var context = request.Get<NancyContext>("nancy.NancyContext");
+            if (context == null || context.CurrentUser == null)
+            {
+                return null;
+            }
+
+            var user = context.CurrentUser as UserIdentity;
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userId = user.UserId.ToString("D");
+            return new RaygunIdentifierMessage(user.UserName)
+            {
+                Email = string.Format("{0}@raygunio.test", user.UserName),
+                FirstName = "robbie",
+                FullName = "robbie the robot",
+                IsAnonymous = false,
+                UUID = userId
+            };
+        }
+
+        private RaygunIdentifierMessage GetRaygunIdentifierForClaimsPrincipal(OwinRequest request)
+        {
+            var result = new RaygunIdentifierMessage(null)
+            {
+                IsAnonymous = true
+            };
+
+            var principal = request.User as ClaimsPrincipal;
+            if (principal != null && principal.Identity != null)
+            {
+                result.Identifier = principal.Identity.Name;
+
+                if (principal.Identity.IsAuthenticated)
+                {
+                    result.IsAnonymous = false;
+                }
+            }
+
+            return result;
         }
     }
 }

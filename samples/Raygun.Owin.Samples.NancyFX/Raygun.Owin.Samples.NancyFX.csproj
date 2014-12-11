@@ -48,6 +48,9 @@
     <Reference Include="Nancy">
       <HintPath>..\..\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
+    <Reference Include="Nancy.Authentication.Forms">
+      <HintPath>..\..\packages\Nancy.Authentication.Forms.0.23.2\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy.Owin">
       <HintPath>..\..\packages\Nancy.Owin.0.23.2\lib\net40\Nancy.Owin.dll</HintPath>
     </Reference>
@@ -61,12 +64,16 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Home\Account.sshtml" />
+    <None Include="Views\Home\Login.sshtml" />
     <Content Include="Views\Home\FormError.html" />
-    <Content Include="Views\Home\Index.html" />
+    <None Include="Views\Home\Index.sshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

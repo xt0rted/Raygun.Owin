@@ -5,6 +5,24 @@
 </head>
 <body>
     <h1>Raygun.Owin with NancyFX</h1>
+
+    <ul>
+        @If.IsAuthenticated
+        <li>
+            <a href="/account">User Account</a>
+        </li>
+        <li>
+            <a href="/logout">Log Out</a>
+        </li>
+        @EndIf
+
+        @IfNot.IsAuthenticated
+        <li>
+            <a href="/login">Log In</a>
+        </li>
+        @EndIf
+    </ul>
+
     <ul>
         <li>
             <a href="/exception">Unhandled Middleware Exception</a>
