@@ -129,6 +129,13 @@
             return this;
         }
 
+        public IRaygunMessageBuilder SetUser(RaygunIdentifierMessage user)
+        {
+            _raygunMessage.Details.User = user;
+
+            return this;
+        }
+
         public IRaygunMessageBuilder SetVersion()
         {
             var entryAssembly = Assembly.GetEntryAssembly();

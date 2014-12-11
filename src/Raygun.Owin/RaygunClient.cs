@@ -121,6 +121,12 @@
         {
             exception = StripWrapperExceptions(exception);
 
+            RaygunIdentifierMessage userInfo = null;
+            if (_settings.LoadUserDetails != null)
+            {
+                userInfo = _settings.LoadUserDetails(environment);
+            }
+
             var mergedTags = _settings.Tags
                                       .Union(tags ?? Enumerable.Empty<string>())
                                       .ToList();
@@ -134,6 +140,7 @@
                                               .SetVersion()
                                               .SetTags(mergedTags)
                                               .SetUserCustomData(userCustomData)
+                                              .SetUser(userInfo)
                                               .Build();
             return message;
         }

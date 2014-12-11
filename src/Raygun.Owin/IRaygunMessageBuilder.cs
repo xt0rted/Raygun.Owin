@@ -17,6 +17,7 @@
         IRaygunMessageBuilder SetHttpDetails(OwinEnvironment environment);
         IRaygunMessageBuilder SetMachineName(string machineName);
         IRaygunMessageBuilder SetTags(IList<string> tags);
+        IRaygunMessageBuilder SetUser(RaygunIdentifierMessage user);
         IRaygunMessageBuilder SetUserCustomData(IDictionary<string, object> userCustomData);
         IRaygunMessageBuilder SetVersion();
     }

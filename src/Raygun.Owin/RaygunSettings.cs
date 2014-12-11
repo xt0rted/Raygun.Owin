@@ -7,6 +7,8 @@
 
     using Raygun.Messages;
 
+    using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
+
     public class RaygunSettings
     {
         public RaygunSettings()
@@ -18,6 +20,7 @@
 
         public string ApiEndpoint { get; set; }
         public string ApiKey { get; set; }
+        public Func<OwinEnvironment, RaygunIdentifierMessage> LoadUserDetails { get; set; }
         public Action<RaygunMessage> MessageInspector { get; set; }
         public IList<string> Tags { get; set; }
         public bool ThrowOnError { get; set; }

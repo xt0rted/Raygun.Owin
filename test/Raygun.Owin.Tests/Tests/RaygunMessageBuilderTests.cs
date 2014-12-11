@@ -7,6 +7,8 @@
 
     using NUnit.Framework;
 
+    using Raygun.Messages;
+
     using Shouldly;
 
     [TestFixture]
@@ -113,6 +115,46 @@
 
             // Then
             result.Details.UserCustomData.ShouldBe(data);
+        }
+
+        [Test]
+        public void Should_set_custom_user_data_to_null()
+        {
+            // Given
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUserCustomData(null).Build();
+
+            // Then
+            result.Details.UserCustomData.ShouldBe(null);
+        }
+
+        [Test]
+        public void Should_set_user_details()
+        {
+            // Given
+            var userDetails = new RaygunIdentifierMessage("testUser");
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUser(userDetails).Build();
+
+            // Then
+            result.Details.User.ShouldBe(userDetails);
+        }
+
+        [Test]
+        public void Should_set_user_details_to_null()
+        {
+            // Given
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUser(null).Build();
+
+            // Then
+            result.Details.User.ShouldBe(null);
         }
 
         [Test]
