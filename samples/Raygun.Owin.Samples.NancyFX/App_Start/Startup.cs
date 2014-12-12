@@ -3,6 +3,7 @@
 namespace Raygun.Owin.Samples.NancyFX
 {
     using System;
+    using System.Reflection;
     using System.Security.Claims;
 
     using global::Owin;
@@ -15,25 +16,43 @@ namespace Raygun.Owin.Samples.NancyFX
 
     using Raygun.Messages;
 
-    public class Startup
+    public class Startup : RaygunStartup
     {
-        public void Configuration(IAppBuilder app)
+        private readonly Lazy<string> _applicationVersion = new Lazy<string>(() =>
         {
-            var settings = new RaygunSettings
-            {
-                LoadUserDetails = environment =>
-                {
-                    var request = new OwinRequest(environment);
+            var application = Assembly.GetExecutingAssembly();
 
-                    return GetRaygunIdentifierForNancyContext(request) ??
-                           GetRaygunIdentifierForClaimsPrincipal(request);
-                }
+            return application.GetName().Version.ToString();
+        });
+
+        protected override string ApplicationVersion()
+        {
+            return _applicationVersion.Value;
+        }
+
+        protected override RaygunSettings SetupSettings()
+        {
+            var settings = base.SetupSettings();
+
+            settings.LoadUserDetails = environment =>
+            {
+                if (environment == null) return null;
+
+                var request = new OwinRequest(environment);
+
+                return GetRaygunIdentifierForNancyContext(request) ??
+                       GetRaygunIdentifierForClaimsPrincipal(request);
             };
 
 #if DEBUG
             settings.Tags.Add("debug");
 #endif
 
+            return settings;
+        }
+
+        public override void SetupConfiguration(IAppBuilder app, RaygunSettings settings)
+        {
             app.UseRaygun(options =>
             {
                 options.LogUnhandledExceptions = true;
