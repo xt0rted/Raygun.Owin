@@ -42,7 +42,9 @@ To log unhandled exceptions you will need to register the `RaygunUnhandledExcept
 To log unhandled requests you will need to register the `RaygunUnhandledRequestMiddleware` before the middleware you would like to log unhandled requests for. Since requests will pass through you may also choose to register a catch all error page. You may also exclude this altogether and log the unhandled requests from inside your application or another piece of middleware.
 
 
-### Example
+### IAppBuilder Example
+
+*See the [Raygun.Owin.Samples.NancyFX](/samples/Raygun.Owin.Samples.NancyFX) project for a more complete example.*
 
 ```csharp
 public class Startup
