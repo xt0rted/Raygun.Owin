@@ -45,6 +45,7 @@
     <Compile Include="AppBuilderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RaygunOptions.cs" />
+    <Compile Include="RaygunStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
