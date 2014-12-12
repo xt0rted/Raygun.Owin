@@ -74,7 +74,7 @@ public class Startup
 
 #### Caveats
 
-Exceptions which are thrown during application setup will not be caught. To log these you will need to wrap your setup code in a try/catch block and then log the exceptions manually like so:
+Since Raygun.Owin is middleware exceptions thrown during application setup will not be caught. To log these you will need to wrap your setup code in a try/catch block and then log the exceptions manually like so:
 
 ```csharp
 public class Startup
@@ -95,6 +95,8 @@ public class Startup
     }
 }
 ```
+
+*If you update your `Startup` class to inherit from `RaygunStartup` then this will be handled for you.*
 
 
 ## Usage with NancyFX
