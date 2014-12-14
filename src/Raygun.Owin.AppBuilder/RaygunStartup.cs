@@ -9,24 +9,9 @@
 
     public abstract class RaygunStartup
     {
-        protected virtual string ApplicationVersion()
-        {
-            return null;
-        }
-
         protected virtual RaygunSettings SetupSettings()
         {
-            return new RaygunSettings
-            {
-                MessageInspector = message =>
-                {
-                    var version = ApplicationVersion();
-                    if (version != null)
-                    {
-                        message.Details.Version = version;
-                    }
-                }
-            };
+            return new RaygunSettings();
         }
 
         public virtual void Configuration(IAppBuilder app)

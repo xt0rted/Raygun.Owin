@@ -15,15 +15,27 @@
         {
             ApiEndpoint = ConfigurationManager.AppSettings["raygun:apiEndpoint"] ?? Constants.RaygunApiEndpoint;
             ApiKey = ConfigurationManager.AppSettings["raygun:apiKey"];
+            ApplicationVersion = LoadApplicationVersion(ConfigurationManager.AppSettings["raygun:applicationVersion"]);
             Tags = LoadTags(ConfigurationManager.AppSettings["raygun:tags"]);
         }
 
         public string ApiEndpoint { get; set; }
         public string ApiKey { get; set; }
+        public string ApplicationVersion { get; set; }
         public Func<OwinEnvironment, RaygunIdentifierMessage> LoadUserDetails { get; set; }
         public Action<RaygunMessage> MessageInspector { get; set; }
         public IList<string> Tags { get; set; }
         public bool ThrowOnError { get; set; }
+
+        private static string LoadApplicationVersion(string version)
+        {
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                return null;
+            }
+
+            return version.Trim();
+        }
 
         private static IList<string> LoadTags(string tags)
         {

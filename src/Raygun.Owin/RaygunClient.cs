@@ -137,7 +137,7 @@
                                               .SetMachineName(Environment.MachineName)
                                               .SetExceptionDetails(exception)
                                               .SetClientDetails()
-                                              .SetVersion()
+                                              .SetVersion(_settings.ApplicationVersion)
                                               .SetTags(mergedTags)
                                               .SetUserCustomData(userCustomData)
                                               .SetUser(userInfo)

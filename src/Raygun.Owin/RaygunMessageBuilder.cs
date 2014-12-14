@@ -136,19 +136,26 @@
             return this;
         }
 
-        public IRaygunMessageBuilder SetVersion()
+        public IRaygunMessageBuilder SetVersion(string version = null)
         {
-            var entryAssembly = Assembly.GetEntryAssembly();
-
-            if (entryAssembly != null)
+            if (!string.IsNullOrEmpty(version))
             {
-                _raygunMessage.Details.Version = entryAssembly.GetName()
-                                                              .Version
-                                                              .ToString();
+                _raygunMessage.Details.Version = version;
             }
             else
             {
-                _raygunMessage.Details.Version = "Not supplied";
+                var entryAssembly = Assembly.GetEntryAssembly();
+
+                if (entryAssembly != null)
+                {
+                    _raygunMessage.Details.Version = entryAssembly.GetName()
+                                                                  .Version
+                                                                  .ToString();
+                }
+                else
+                {
+                    _raygunMessage.Details.Version = "Not supplied";
+                }
             }
 
             return this;

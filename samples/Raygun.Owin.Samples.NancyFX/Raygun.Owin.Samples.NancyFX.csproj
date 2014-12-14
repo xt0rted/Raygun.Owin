@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="App_Start\Startup.Raygun.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Modules\HomeModule.cs" />

@@ -131,33 +131,6 @@
         }
 
         [Test]
-        public void Should_set_user_details()
-        {
-            // Given
-            var userDetails = new RaygunIdentifierMessage("testUser");
-            var sut = SutFactory();
-
-            // When
-            var result = sut.SetUser(userDetails).Build();
-
-            // Then
-            result.Details.User.ShouldBe(userDetails);
-        }
-
-        [Test]
-        public void Should_set_user_details_to_null()
-        {
-            // Given
-            var sut = SutFactory();
-
-            // When
-            var result = sut.SetUser(null).Build();
-
-            // Then
-            result.Details.User.ShouldBe(null);
-        }
-
-        [Test]
         public void Should_set_tags()
         {
             // Given
@@ -199,6 +172,60 @@
             // Then
             result.Details.Tags.ShouldNotBe(null);
             result.Details.Tags.ShouldBeEmpty();
+        }
+
+        [Test]
+        public void Should_set_user_details()
+        {
+            // Given
+            var userDetails = new RaygunIdentifierMessage("testUser");
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUser(userDetails).Build();
+
+            // Then
+            result.Details.User.ShouldBe(userDetails);
+        }
+
+        [Test]
+        public void Should_set_user_details_to_null()
+        {
+            // Given
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetUser(null).Build();
+
+            // Then
+            result.Details.User.ShouldBe(null);
+        }
+
+        [Test]
+        public void Should_set_version_to_custom_value()
+        {
+            // Given
+            const string applicationVersion = "test-version";
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetVersion(applicationVersion).Build();
+
+            // Then
+            result.Details.Version.ShouldBe(applicationVersion);
+        }
+
+        [Test]
+        public void Should_set_version_when_no_entry_assembly_found()
+        {
+            // Given
+            var sut = SutFactory();
+
+            // When
+            var result = sut.SetVersion().Build();
+
+            // Then
+            result.Details.Version.ShouldBe("Not supplied");
         }
 
         private static IRaygunMessageBuilder SutFactory(Exception exception = null)
