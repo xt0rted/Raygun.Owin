@@ -1,4 +1,10 @@
-﻿namespace Raygun.Builders
+﻿using System.Diagnostics.Contracts;
+using System.IO;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Raygun.Builders
 {
     using System;
     using System.Collections.Generic;
@@ -11,6 +17,85 @@
 
     public static class RaygunRequestMessageBuilder
     {
+        private const string ContentLengthHeaderName = "Content-Length";
+        internal static int? GetContentLength(this IOwinRequest request)
+        {
+            Contract.Assert(request != null);
+
+            IHeaderDictionary headers = request.Headers;
+
+            if (headers == null)
+            {
+                return null;
+            }
+
+            string[] values;
+
+            if (!headers.TryGetValue(ContentLengthHeaderName, out values))
+            {
+                return null;
+            }
+
+            if (values == null || values.Length != 1)
+            {
+                return null;
+            }
+
+            string value = values[0];
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            int parsed;
+
+            if (!Int32.TryParse(value, out parsed))
+            {
+                return null;
+            }
+
+            if (parsed < 0)
+            {
+                return null;
+            }
+
+            return parsed;
+        }
+
+        internal static async Task<Stream> CreateBufferedRequestBodyAsync(this IOwinRequest owinRequest)
+        {
+            // We need to replace the request body with a buffered stream so that other components can read the stream.
+            // For this stream to be useful, it must NOT be diposed along with the request. Streams created by
+            // StreamContent do get disposed along with the request, so use MemoryStream to buffer separately.
+            MemoryStream buffer;
+            int? contentLength = owinRequest.GetContentLength();
+
+            if (!contentLength.HasValue)
+            {
+                buffer = new MemoryStream();
+            }
+            else
+            {
+                buffer = new MemoryStream(contentLength.Value);
+            }
+
+            //cancellationToken.ThrowIfCancellationRequested();
+
+            using (var copier = new StreamContent(owinRequest.Body))
+            {
+                await copier.CopyToAsync(buffer);
+            }
+            //await owinRequest.Body.CopyToAsync(buffer);
+
+            // Provide the non-disposing, buffered stream to later OWIN components (set to the stream's beginning).
+            buffer.Position = 0;
+            owinRequest.Body = buffer;
+
+            // For MemoryStream, Length is guaranteed to be an int.
+            return new MemoryStream(buffer.GetBuffer(), 0, (int)buffer.Length);
+        }
+
         public static RaygunRequestMessage Build(OwinEnvironment environment)
         {
             var request = new OwinRequest(environment);

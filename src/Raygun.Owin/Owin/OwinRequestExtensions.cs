@@ -4,7 +4,7 @@
     using System.Text;
 
     using Raygun.Owin.Infrastructure;
-
+    using Raygun.Builders;
     internal static class OwinRequestExtensions
     {
         /// <summary>
@@ -16,18 +16,23 @@
             var form = request.Get<IFormCollection>("Microsoft.Owin.Form#collection");
             if (form == null)
             {
-                request.Body.Seek(0, SeekOrigin.Begin);
+                
+                var str = request.CreateBufferedRequestBodyAsync();
+                str.Wait();
+                // not allowed:
+                //request.Body.Seek(0, SeekOrigin.Begin);
 
                 string text;
 
                 // Don't close, it prevents re-winding.
-                using (var reader = new StreamReader(request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 4 * 1024, leaveOpen: true))
+                using (var reader = new StreamReader(str.Result))
                 {
                     text = reader.ReadToEnd();
                 }
 
                 // re-wind for the next caller
-                request.Body.Seek(0, SeekOrigin.Begin);
+                // not allowed:
+                //request.Body.Seek(0, SeekOrigin.Begin);
 
                 form = OwinHelpers.GetForm(text);
                 request.Set("Microsoft.Owin.Form#collection", form);
@@ -54,4 +59,5 @@
             return text;
         }
     }
+
 }
