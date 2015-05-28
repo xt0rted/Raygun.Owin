@@ -5,6 +5,8 @@
 
     using global::Owin;
 
+    using Raygun.LibOwin;
+
     public static class AppBuilderExtensions
     {
         public static IAppBuilder UseRaygun(this IAppBuilder builder, Action<RaygunOptions> configuration)

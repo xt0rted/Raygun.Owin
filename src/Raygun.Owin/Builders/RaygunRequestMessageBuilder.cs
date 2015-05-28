@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Raygun.LibOwin;
     using Raygun.Messages;
     using Raygun.Owin;
 

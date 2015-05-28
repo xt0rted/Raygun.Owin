@@ -6,8 +6,8 @@
     using System.Reflection;
 
     using Raygun.Builders;
+    using Raygun.LibOwin;
     using Raygun.Messages;
-    using Raygun.Owin;
 
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 

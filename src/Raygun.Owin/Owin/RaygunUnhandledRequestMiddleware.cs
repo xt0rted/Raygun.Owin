@@ -3,6 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
+    using Raygun.LibOwin;
+
     using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
@@ -43,7 +45,9 @@
             var responseCode = environment.Get<int>(OwinConstants.ResponseStatusCode);
             if (responseCode == 404)
             {
-                _client.SendInBackground(environment, new UnhandledRequestException());
+                var requestUrl = environment.Get<string>(OwinConstants.RequestPath);
+
+                _client.SendInBackground(environment, new UnhandledRequestException(requestUrl));
             }
         }
     }

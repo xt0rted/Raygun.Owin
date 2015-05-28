@@ -2,7 +2,7 @@
 {
     using System.IO;
 
-    using Raygun.Owin;
+    using Raygun.LibOwin;
 
     internal class TestOwinContext : OwinContext
     {

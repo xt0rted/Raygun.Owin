@@ -3,7 +3,8 @@
     using System.IO;
     using System.Text;
 
-    using Raygun.Owin.Infrastructure;
+    using Raygun.LibOwin;
+    using Raygun.LibOwin.Infrastructure;
 
     internal static class OwinRequestExtensions
     {

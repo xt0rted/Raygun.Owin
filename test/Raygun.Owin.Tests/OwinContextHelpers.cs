@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Raygun.Owin;
+    using Raygun.LibOwin;
 
     internal static class OwinContextHelpers
     {
