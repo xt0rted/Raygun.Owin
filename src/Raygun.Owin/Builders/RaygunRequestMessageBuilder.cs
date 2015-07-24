@@ -20,7 +20,7 @@
             var message = new RaygunRequestMessage();
 
             message.HostName = request.Host.Value;
-            message.Url = request.Uri.ToString();
+            message.Url = request.Uri.AbsolutePath;
             message.HttpMethod = request.Method;
             message.IPAddress = request.RemoteIpAddress; // ToDo: bring this up to par with the official client
 
