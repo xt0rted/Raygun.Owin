@@ -39,12 +39,12 @@
 
             if (raygunOptions.LogUnhandledExceptions)
             {
-                builder.Use(typeof (RaygunUnhandledExceptionMiddleware), raygunOptions.Settings);
+                builder.Use(typeof (RaygunUnhandledExceptionMiddleware), raygunOptions.Settings, options.PreventWrappingRequestBody);
             }
 
             if (raygunOptions.LogUnhandledRequests)
             {
-                builder.Use(typeof (RaygunUnhandledRequestMiddleware), raygunOptions.Settings);
+                builder.Use(typeof (RaygunUnhandledRequestMiddleware), raygunOptions.Settings, options.PreventWrappingRequestBody);
             }
 
             SetRaygunCapabilities(builder.Properties);

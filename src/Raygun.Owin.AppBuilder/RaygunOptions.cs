@@ -7,6 +7,8 @@
             Settings = new RaygunSettings();
         }
 
+        public bool PreventWrappingRequestBody { get; set; }
+
         public bool LogUnhandledExceptions { get; set; }
 
         public bool LogUnhandledRequests { get; set; }
