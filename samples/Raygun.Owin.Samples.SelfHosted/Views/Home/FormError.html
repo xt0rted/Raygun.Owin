@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Raygun.Owin Sample</title>
+</head>
+<body>
+    <form id="Form" action="/form-error" method="POST">
+        <table>
+            <tr>
+                <td>User Name</td>
+                <td>
+                    <input type="text" id="UserName" name="UserName" value="robbie" />
+                </td>
+            </tr>
+            <tr>
+                <td>Full Name</td>
+                <td>
+                    <input type="text" id="FullName" name="FullName" value="robbie the robot" />
+                </td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>
+                    <input type="password" id="Password" name="Password" value="0110100001101001" />
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $('#Form').submit(function(e) {
+            e.preventDefault();
+
+            var formData = {
+                userName: $('#UserName').val(),
+                fullName: $('#FullName').val(),
+                password: $('#Password').val()
+            };
+
+            $.post('/form-error', JSON.stringify(formData), function() {
+                console.log('ok');
+            }, 'application/json').fail(function() {
+                console.log('error');
+            });
+        });
+    </script>
+</body>
+</html>
