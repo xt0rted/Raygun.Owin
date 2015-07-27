@@ -7,10 +7,7 @@ namespace Raygun.Owin.Samples.NancyFX
     using global::Owin;
 
     using Microsoft.Owin;
-
-    using Nancy;
-    using Nancy.Extensions;
-    using Nancy.Owin;
+    using Microsoft.Owin.Extensions;
 
     public partial class Startup : RaygunStartup
     {
@@ -33,27 +30,8 @@ namespace Raygun.Owin.Samples.NancyFX
                 return next();
             });
 
-            app.UseNancy(options =>
-            {
-                options.PerformPassThrough = context =>
-                {
-                    if (context.Response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        Exception exception;
-                        if (context.TryGetException(out exception))
-                        {
-                            if (exception is RequestExecutionException)
-                            {
-                                exception = exception.InnerException;
-                            }
-
-                            ReportError(settings, context.GetOwinEnvironment(), exception);
-                        }
-                    }
-
-                    return false;
-                };
-            });
+            app.UseNancy();
+            app.UseStageMarker(PipelineStage.MapHandler);
         }
     }
 }

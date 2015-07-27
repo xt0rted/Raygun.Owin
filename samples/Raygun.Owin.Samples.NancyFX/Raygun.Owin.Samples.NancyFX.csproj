@@ -82,6 +82,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RethrowStatusCodeHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Raygun.Owin.AppBuilder\Raygun.Owin.AppBuilder.csproj">
