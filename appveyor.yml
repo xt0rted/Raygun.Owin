@@ -29,3 +29,9 @@ deploy:
       secure: 9ztVruXzf0tF7J1efrUsSE2yYqB7uALKcp49ccmLMD4UNqvs3wS99xtrwZEWzwNC
     skip_symbols: true
     symbol_server: https://nuget.symbolsource.org/MyGet/13degrees
+
+notifications:
+  - provider: Slack
+    auth_token:
+      secure: z7yNA5gLaQjKIWhrDw2b2j1tYJIEFPRtlfdVGPpV2U52q4ZvMdBrKosEGG587FMhybm8UfhoQeNZUUju1ExOtQ==
+    channel: opensource
