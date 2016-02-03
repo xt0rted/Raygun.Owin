@@ -1,6 +1,4 @@
-﻿[assembly: Microsoft.Owin.OwinStartup(typeof(Raygun.Owin.Samples.NancyFX.Startup))]
-
-namespace Raygun.Owin.Samples.NancyFX
+﻿namespace Raygun.Owin.Samples.SelfHosted
 {
     using System;
 

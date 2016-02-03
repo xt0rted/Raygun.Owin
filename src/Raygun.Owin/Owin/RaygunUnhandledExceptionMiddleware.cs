@@ -6,65 +6,47 @@
     using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
-    public class RaygunUnhandledExceptionMiddleware
+    public class RaygunUnhandledExceptionMiddleware : BaseRaygunMiddleware
     {
-        private readonly AppFunc _next;
-        private readonly RaygunClient _client;
-
-        public RaygunUnhandledExceptionMiddleware(AppFunc next, RaygunSettings settings)
+        public RaygunUnhandledExceptionMiddleware(AppFunc next, RaygunSettings settings, bool preventWrappingRequestBody = false)
+            : base(next, settings, preventWrappingRequestBody)
         {
-            if (next == null)
-            {
-                throw new ArgumentNullException("next");
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-
-            _next = next;
-
-            if (!string.IsNullOrEmpty(settings.ApiKey))
-            {
-                _client = new RaygunClient(settings);
-            }
         }
 
-        public Task Invoke(OwinEnvironment environment)
+        public async Task Invoke(OwinEnvironment environment)
         {
-            if (_client == null)
-            {
-                return _next(environment);
-            }
+            WrapRequestBody(environment);
 
-            return _next(environment).ContinueWith(appTask =>
+            try
             {
-                if (appTask.IsFaulted && appTask.Exception != null)
+                await Next(environment);
+            }
+            catch (AggregateException ex)
+            {
+                if (Client != null)
                 {
-                    foreach (var innerException in appTask.Exception.InnerExceptions)
+                    foreach (var innerException in ex.InnerExceptions)
                     {
                         HandleException(environment, innerException);
                     }
-
-                    throw appTask.Exception;
                 }
 
-                var exception = environment.Get<Exception>(Constants.RaygunKeys.WebApiExceptionKey);
-                if (exception != null)
+                throw;
+            }
+            catch (Exception ex)
+            {
+                if (Client != null)
                 {
-                    HandleException(environment, exception);
-
-                    throw exception;
+                    HandleException(environment, ex);
                 }
 
-                return appTask;
-            });
+                throw;
+            }
         }
 
         private void HandleException(OwinEnvironment environment, Exception exception)
         {
-            _client.SendInBackground(environment, exception);
+            Client.SendInBackground(environment, exception);
         }
     }
 }
