@@ -171,4 +171,4 @@ public class OwinRequestExceptionLoggerAttribute : ExceptionFilterAttribute
 
 ## Copyright and license
 
-Copyright (c) 2014 Brian Surowiec under [the MIT License](LICENSE).
+Copyright (c) 2016 Brian Surowiec under [the MIT License](LICENSE).
