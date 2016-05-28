@@ -88,14 +88,14 @@ namespace Raygun.Tests
         {
             ConfigurationManager.AppSettings["raygun:tags"] = tags;
 
-            return new RaygunSettings();
+            return RaygunSettings.LoadFromAppSettings();
         }
 
         private RaygunSettings SutFactoryForVersion(string version)
         {
             ConfigurationManager.AppSettings["raygun:applicationVersion"] = version;
 
-            return new RaygunSettings();
+            return RaygunSettings.LoadFromAppSettings();
         }
     }
 }
