@@ -56,6 +56,7 @@
     <Compile Include="Tests\RaygunClientTests.cs" />
     <Compile Include="Tests\RaygunMessageBuilderTests.cs" />
     <Compile Include="Tests\RaygunSettingsTests.cs" />
+    <Compile Include="Tests\UnhandledRequestExceptionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Raygun.Owin\Raygun.Owin.csproj">

@@ -5,7 +5,7 @@
     public class UnhandledRequestException : Exception
     {
         public UnhandledRequestException(string url)
-            : base("The request was unhandled.")
+            : base($"The request was unhandled: {url}")
         {
             RequestUrl = url;
         }
