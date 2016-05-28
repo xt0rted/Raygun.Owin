@@ -11,7 +11,7 @@
     {
         protected virtual RaygunSettings SetupSettings()
         {
-            return new RaygunSettings();
+            return RaygunSettings.Settings;
         }
 
         public virtual void Configuration(IAppBuilder app)

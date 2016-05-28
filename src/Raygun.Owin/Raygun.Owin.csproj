@@ -54,6 +54,7 @@
     <Compile Include="Owin\RaygunUnhandledExceptionMiddleware.cs" />
     <Compile Include="Owin\RaygunUnhandledRequestMiddleware.cs" />
     <Compile Include="RaygunClientBase.cs" />
+    <Compile Include="RaygunSettings.Helpers.cs" />
     <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="UnhandledRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

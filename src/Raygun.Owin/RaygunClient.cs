@@ -49,11 +49,6 @@
             });
         }
 
-        public RaygunClient()
-            : this(new RaygunSettings())
-        {
-        }
-
         public RaygunClient(RaygunSettings settings)
         {
             _settings = settings;

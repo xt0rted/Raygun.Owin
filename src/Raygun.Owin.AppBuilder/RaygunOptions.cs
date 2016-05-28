@@ -4,7 +4,7 @@
     {
         public RaygunOptions()
         {
-            Settings = new RaygunSettings();
+            Settings = RaygunSettings.Settings;
         }
 
         public bool LogUnhandledExceptions { get; set; }
