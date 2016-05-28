@@ -7,6 +7,17 @@
 
     public partial class RaygunSettings
     {
+        private static bool GetBoolean(string settingName, bool defaultValue)
+        {
+            bool temp;
+            if (!bool.TryParse(ConfigurationManager.AppSettings[settingName], out temp))
+            {
+                temp = defaultValue;
+            }
+
+            return temp;
+        }
+
         private static string GetString(string settingName, string defaultValue = null)
         {
             var temp = ConfigurationManager.AppSettings[settingName];
@@ -25,7 +36,8 @@
                 ApiEndpoint = GetString("raygun:apiEndpoint", Constants.RaygunApiEndpoint),
                 ApiKey = GetString("raygun:apiKey"),
                 ApplicationVersion = LoadApplicationVersion(GetString("raygun:applicationVersion")),
-                Tags = LoadTags(GetString("raygun:tags"))
+                Tags = LoadTags(GetString("raygun:tags")),
+                ExcludeErrorsFromLocal = GetBoolean("raygun:excludeErrorsFromLocal", false)
             };
 
             return settings;

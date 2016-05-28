@@ -9,7 +9,9 @@
     using System.Text;
     using System.Threading;
 
+    using Raygun.LibOwin;
     using Raygun.Messages;
+    using Raygun.Owin;
 
     using OwinEnvironment = System.Collections.Generic.IDictionary<string, object>;
 
@@ -142,14 +144,11 @@
 
         public void Send(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
-            if (CanSend(exception))
+            if (CanSend(environment, exception))
             {
                 var message = BuildMessage(environment, exception, tags, userCustomData);
 
-                if (_settings.MessageInspector != null)
-                {
-                    _settings.MessageInspector(message);
-                }
+                _settings.MessageInspector?.Invoke(message);
 
                 Send(message);
                 FlagAsSent(exception);
@@ -158,14 +157,11 @@
 
         public void SendInBackground(OwinEnvironment environment, Exception exception, IList<string> tags = null, IDictionary<string, object> userCustomData = null)
         {
-            if (CanSend(exception))
+            if (CanSend(environment, exception))
             {
                 var message = BuildMessage(environment, exception, tags, userCustomData);
 
-                if (_settings.MessageInspector != null)
-                {
-                    _settings.MessageInspector(message);
-                }
+                _settings.MessageInspector?.Invoke(message);
 
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
@@ -190,7 +186,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", ex.Message));
+                    Trace.WriteLine($"Error Logging Exception to Raygun.io {ex.Message}");
 
                     if (_settings.ThrowOnError)
                     {
@@ -198,6 +194,31 @@
                     }
                 }
             }
+        }
+
+        public bool CanSend(OwinEnvironment environment, Exception exception)
+        {
+            if (_settings.ExcludeErrorsFromLocal && environment != null)
+            {
+                var request = new OwinRequest(environment);
+
+                try
+                {
+                    if (request.IsLocal())
+                    {
+                        return false;
+                    }
+                }
+                catch
+                {
+                    if (_settings.ThrowOnError)
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return CanSend(exception);
         }
     }
 }
