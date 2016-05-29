@@ -1,5 +1,6 @@
 ﻿namespace Raygun.Owin
 {
+    using System;
     using System.IO;
     using System.Text;
 
@@ -53,6 +54,28 @@
             request.Body.Seek(0, SeekOrigin.Begin);
 
             return text;
+        }
+
+        internal static bool IsLocal(this OwinRequest request)
+        {
+            var remoteAddress = request.RemoteIpAddress;
+
+            if (string.IsNullOrEmpty(remoteAddress))
+            {
+                return false;
+            }
+
+            if (remoteAddress == "127.0.0.1" || remoteAddress == "::1")
+            {
+                return true;
+            }
+
+            if (remoteAddress == request.LocalIpAddress)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

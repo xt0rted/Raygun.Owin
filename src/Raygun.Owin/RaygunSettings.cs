@@ -24,5 +24,7 @@
         public IList<string> Tags { get; set; }
 
         public bool ThrowOnError { get; set; }
+
+        public bool ExcludeErrorsFromLocal { get; set; }
     }
 }

@@ -12,8 +12,45 @@ namespace Raygun.Tests
         [TearDown]
         public void TearDown()
         {
+            ConfigurationManager.AppSettings["raygun:apiEndpoint"] = null;
+            ConfigurationManager.AppSettings["raygun:apiKey"] = null;
             ConfigurationManager.AppSettings["raygun:applicationVersion"] = null;
             ConfigurationManager.AppSettings["raygun:tags"] = null;
+            ConfigurationManager.AppSettings["raygun:excludeErrorsFromLocal"] = null;
+        }
+
+        [Test]
+        public void Should_gracefully_handle_no_custom_settings()
+        {
+            // Given / When
+            var sut = SutFactory();
+
+            // Then
+            sut.ApiEndpoint.ShouldBe(Constants.RaygunApiEndpoint);
+            sut.ApiKey.ShouldBeNull();
+            sut.ApplicationVersion.ShouldBeNull();
+            sut.Tags.ShouldBeEmpty();
+            sut.ExcludeErrorsFromLocal.ShouldBeFalse();
+        }
+
+        [Test]
+        public void Should_handle_custom_endpoint()
+        {
+            // Given / When
+            var sut = SutFactory(endpoint: "http:example.com");
+
+            // Then
+            sut.ApiEndpoint.ShouldBe("http:example.com");
+        }
+
+        [Test]
+        public void Should_handle_custom_apikey()
+        {
+            // Given / When
+            var sut = SutFactory(apiKey: "abc123");
+
+            // Then
+            sut.ApiKey.ShouldBe("abc123");
         }
 
         [TestCase("1.2.3.4-beta2")]
@@ -21,7 +58,7 @@ namespace Raygun.Tests
         public void Should_handle_app_settings_application_version(string version)
         {
             // Given / When
-            var sut = SutFactoryForVersion(version);
+            var sut = SutFactory(version: version);
 
             // Then
             sut.ApplicationVersion.ShouldBe("1.2.3.4-beta2");
@@ -31,17 +68,7 @@ namespace Raygun.Tests
         public void Should_handle_app_settings_application_version_that_is_empty()
         {
             // Given / When
-            var sut = SutFactoryForVersion(string.Empty);
-
-            // Then
-            sut.ApplicationVersion.ShouldBe(null);
-        }
-
-        [Test]
-        public void Should_handle_app_settings_application_version_that_is_null()
-        {
-            // Given / When
-            var sut = SutFactoryForVersion(null);
+            var sut = SutFactory(version: string.Empty);
 
             // Then
             sut.ApplicationVersion.ShouldBe(null);
@@ -54,7 +81,7 @@ namespace Raygun.Tests
         public void Should_handle_app_settings_tags(string tags)
         {
             // Given / When
-            var sut = SutFactoryForTags(tags);
+            var sut = SutFactory(tags: tags);
 
             // Then
             sut.Tags.ShouldNotBe(null);
@@ -66,34 +93,36 @@ namespace Raygun.Tests
         public void Should_handle_app_settings_tags_that_are_empty()
         {
             // Given / When
-            var sut = SutFactoryForTags(string.Empty);
+            var sut = SutFactory(tags: string.Empty);
 
             // Then
             sut.Tags.ShouldNotBe(null);
             sut.Tags.ShouldBeEmpty();
         }
 
-        [Test]
-        public void Should_handle_app_settings_tags_that_are_null()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Should_handle_custom_exclude_local_errors(bool value)
         {
             // Given / When
-            var sut = SutFactoryForTags(null);
+            var sut = SutFactory(excludeLocalErrors: value);
 
             // Then
-            sut.Tags.ShouldNotBe(null);
-            sut.Tags.ShouldBeEmpty();
+            sut.ExcludeErrorsFromLocal.ShouldBe(value);
         }
 
-        private RaygunSettings SutFactoryForTags(string tags)
+        private RaygunSettings SutFactory(
+            string endpoint = null,
+            string apiKey = null,
+            string tags = null,
+            string version = null,
+            bool? excludeLocalErrors = null)
         {
+            ConfigurationManager.AppSettings["raygun:apiEndpoint"] = endpoint;
+            ConfigurationManager.AppSettings["raygun:apiKey"] = apiKey;
             ConfigurationManager.AppSettings["raygun:tags"] = tags;
-
-            return RaygunSettings.LoadFromAppSettings();
-        }
-
-        private RaygunSettings SutFactoryForVersion(string version)
-        {
             ConfigurationManager.AppSettings["raygun:applicationVersion"] = version;
+            ConfigurationManager.AppSettings["raygun:excludeErrorsFromLocal"] = excludeLocalErrors?.ToString();
 
             return RaygunSettings.LoadFromAppSettings();
         }
