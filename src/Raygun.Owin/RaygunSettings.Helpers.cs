@@ -37,6 +37,7 @@
                 ApiKey = GetString("raygun:apiKey"),
                 ApplicationVersion = LoadApplicationVersion(GetString("raygun:applicationVersion")),
                 Tags = LoadTags(GetString("raygun:tags")),
+                ThrowOnError = GetBoolean("raygun:throwOnError", true),
                 ExcludeErrorsFromLocal = GetBoolean("raygun:excludeErrorsFromLocal", false)
             };
 

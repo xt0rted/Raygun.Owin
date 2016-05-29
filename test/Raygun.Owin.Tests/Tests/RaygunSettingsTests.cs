@@ -16,6 +16,7 @@ namespace Raygun.Tests
             ConfigurationManager.AppSettings["raygun:apiKey"] = null;
             ConfigurationManager.AppSettings["raygun:applicationVersion"] = null;
             ConfigurationManager.AppSettings["raygun:tags"] = null;
+            ConfigurationManager.AppSettings["raygun:throwOnError"] = null;
             ConfigurationManager.AppSettings["raygun:excludeErrorsFromLocal"] = null;
         }
 
@@ -102,6 +103,17 @@ namespace Raygun.Tests
 
         [TestCase(true)]
         [TestCase(false)]
+        public void Should_handle_custom_throw_on_error(bool value)
+        {
+            // Given / When
+            var sut = SutFactory(throwOnError: value);
+
+            // Then
+            sut.ThrowOnError.ShouldBe(value);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
         public void Should_handle_custom_exclude_local_errors(bool value)
         {
             // Given / When
@@ -116,12 +128,14 @@ namespace Raygun.Tests
             string apiKey = null,
             string tags = null,
             string version = null,
+            bool? throwOnError = null,
             bool? excludeLocalErrors = null)
         {
             ConfigurationManager.AppSettings["raygun:apiEndpoint"] = endpoint;
             ConfigurationManager.AppSettings["raygun:apiKey"] = apiKey;
             ConfigurationManager.AppSettings["raygun:tags"] = tags;
             ConfigurationManager.AppSettings["raygun:applicationVersion"] = version;
+            ConfigurationManager.AppSettings["raygun:throwOnError"] = throwOnError?.ToString();
             ConfigurationManager.AppSettings["raygun:excludeErrorsFromLocal"] = excludeLocalErrors?.ToString();
 
             return RaygunSettings.LoadFromAppSettings();

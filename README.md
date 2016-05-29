@@ -30,6 +30,7 @@ The API key and endpoint override can be set in the middleware settings, or they
     <add key="raygun:apiKey" value="abc123" />
     <add key="raygun:tags" value="tag1, tag2, tag3" /> <!-- supported delimiters: , ; | -->
     <add key="raygun:applicationVersion" value="1.2.3.4-beta2" />
+    <add key="raygun:throwOnError" value="false" />
     <add key="raygun:excludeErrorsFromLocal" value="true" />
 </appSettings>
 ```
